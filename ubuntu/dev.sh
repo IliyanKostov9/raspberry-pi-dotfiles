@@ -1,6 +1,7 @@
 echo "Now installing vim colors..."
 git clone https://github.com/rafi/awesome-vim-colorschemes.git ~/temp/
-mv ~/temp/colors/ ~/.vim/colors/
+mkdir ~/.vim
+mv ~/temp/colors/ ~/.vim/
 rm -rf ~/temp
 
 echo "Now installing zsh..."
