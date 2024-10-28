@@ -5,4 +5,4 @@ dotfiles-sync:
 
 .PHONY: dotfiles-cp
 dotfiles-cp:
-	cp ./dotfiles/.* ~/
+	cp ./dotfiles/ ~/

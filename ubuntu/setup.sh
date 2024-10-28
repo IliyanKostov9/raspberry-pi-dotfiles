@@ -6,7 +6,10 @@ sudo apt install -y \
 	fzf \
 	make \
 	bat \
+        make \
 	tree
+
+sudo snap install pi-fancontrol
 
 echo "Now making a setup for docker..."
 sudo apt-get install ca-certificates curl
