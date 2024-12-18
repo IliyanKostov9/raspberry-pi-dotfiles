@@ -1,8 +1,9 @@
-.PHONY: dotfiles-sync
-dotfiles-sync:
+.PHONY: sync
+sync:
 	cp ~/.zshrc ./dotfiles
 	cp ~/.vimrc ./dotfiles
+	cp ~/.config/nix/nix.conf ./dotfiles
 
-.PHONY: dotfiles-cp
-dotfiles-cp:
+.PHONY: copy
+copy:
 	cp ./dotfiles/ ~/
