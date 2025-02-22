@@ -14,3 +14,11 @@ sudo vim /boot/firmware/config.txt
 [all] 
 dtoverlay=gpio-fan,gpiopin=14,temp=65000
 ```
+
+
+## Additional commands
+
+- check temperature
+```bash
+/usr/bin/vcgencmd measure_temp
+```
