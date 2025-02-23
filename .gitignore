@@ -163,11 +163,5 @@ cython_debug/
 .swo
 
 .runner
-config.yml
-.txt
-acme.json
-passbolt/traefik.yaml
-passbolt/config
-passbolt/docker-compose-ce.yaml
-passbolt/docker-compose-ce-SHA512SUM.txt
-passbolt/setup.sh
+docker/personal/shared/
+docker/personal/etc-pihole/
