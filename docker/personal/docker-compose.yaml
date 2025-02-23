@@ -1,0 +1,178 @@
+services:
+  db:
+    image: postgres:13-alpine3.20
+    restart: unless-stopped
+    shm_size: 128mb
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - personal_postgres_volume:/var/lib/postgresql/data
+    secrets:
+      - postgres_db
+      - postgres_username
+      - postgres_password
+
+  passbolt:
+    image: passbolt/passbolt:latest
+    restart: unless-stopped
+    depends_on: 
+      - db
+    environment:
+      APP_FULL_BASE_URL: ${PASSBOLT_APP_BASE_URL}
+      DATASOURCES_DEFAULT_DRIVER: Cake\Database\Driver\Postgres
+      DATASOURCES_DEFAULT_ENCODING: "utf8"
+      DATASOURCES_DEFAULT_URL: ${PASSBOLT_DATASOURCE_URL}
+      EMAIL_DEFAULT_FROM_NAME: "Passbolt"
+      EMAIL_DEFAULT_FROM: ${PASSBOLT_EMAIL_DEFAULT_FROM}
+      EMAIL_TRANSPORT_DEFAULT_HOST: ${PASSBOLT_EMAIL_TRANSPORT_DEFAULT_HOST}
+      EMAIL_TRANSPORT_DEFAULT_CLIENT: ${PASSBOLT_EMAIL_TRANSPORT_DEFAULT_CLIENT}
+      EMAIL_TRANSPORT_DEFAULT_PORT: ${PASSBOLT_EMAIL_TRANSPORT_DEFAULT_PORT}
+      EMAIL_TRANSPORT_DEFAULT_USERNAME: ${PASSBOLT_EMAIL_TRANSPORT_DEFAULT_USERNAME}
+      EMAIL_TRANSPORT_DEFAULT_PASSWORD: ${PASSBOLT_EMAIL_TRANSPORT_DEFAULT_PASSWORD}
+      EMAIL_TRANSPORT_DEFAULT_TLS: "true"
+
+      PASSBOLT_SSL_FORCE: "false"
+      PASSBOLT_PLUGINS_MFA_POLICIES_ENABLED: "true"
+      PASSBOLT_REGISTRATION_PUBLIC: "false"
+      PASSBOLT_SECURITY_SMTP_SETTINGS_ENDPOINTS_DISABLED: "false"
+      # PASSBOLT_EMAIL_VALIDATE_MX: "true"
+    volumes:
+      - gpg_volume:/etc/passbolt/gpg
+      - jwt_volume:/etc/passbolt/jwt
+
+    secrets:
+      - passbolt_app_base_url
+      - passbolt_datasource_url
+      - passbolt_email_default_from
+      - passbolt_email_transport_default_host
+      - passbolt_email_transport_default_client
+      - passbolt_email_transport_default_port
+      - passbolt_email_transport_default_username
+      - passbolt_email_transport_default_password
+
+    command:
+      [
+        "/usr/bin/wait-for.sh",
+        "-t",
+        "0",
+        "db:5432",
+        "--",
+        "/docker-entrypoint.sh",
+      ]
+
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.passbolt-http.entrypoints: "web"
+      traefik.http.routers.passbolt-http.rule: "Host(`${PASSBOLT_EMAIL_TRANSPORT_DEFAULT_CLIENT}`)"
+      traefik.http.routers.passbolt-http.middlewares: "SslHeader@file"
+      traefik.http.routers.passbolt-https.middlewares: "SslHeader@file"
+      traefik.http.routers.passbolt-https.entrypoints: "websecure"
+      traefik.http.routers.passbolt-https.rule: "Host(`${PASSBOLT_EMAIL_TRANSPORT_DEFAULT_CLIENT}`)"
+      traefik.http.routers.passbolt-https.tls: "true"
+      traefik.http.routers.passbolt-https.tls.certresolver: "letsencrypt"
+
+  traefik:
+    image: traefik:2.6
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik.yaml:/traefik.yaml:ro
+      - ./conf/:/etc/traefik/conf
+      - ./shared/:/shared
+
+  pihole:
+    container_name: pi-hole
+    image: pihole/pihole:2024.07.0
+    # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
+    network_mode: "host"
+#    networks:
+#      - pihole
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
+      - "8080:80/tcp"
+
+    dns:
+      - 1.1.1.1
+
+    environment:
+      TZ: 'Europe/Sofia'
+      DNSSEC: true
+      #FTLCONF_LOCAL_IPV4: "192.168.1.2"
+      #FTLCONF_LOCAL_IPV6: "fd00::192:168:1:2"
+      WEB_PORT: 8080
+      DNSMASQ_USER: root
+      # DHCP_rapid_commit: true
+      DHCP_ACTIVE: true
+      DHCP_START: '192.168.1.2'
+      DHCP_END: '192.168.1.100'
+      DHCP_ROUTER: '192.168.1.1'
+      PIHOLE_DNS: '1.1.1.1;1.0.0.1'
+      WEBPASSWORD: ${PIHOLE_WEBPASSWORD}
+    volumes:
+      - 'web_data:/data/etc-pihole:/etc/pihole'
+      - 'web_data:/data/etc-dnsmasq.d:/etc/dnsmasq.d'
+
+    secrets:
+      - pihole_webpassword
+
+    #   https://github.com/pi-hole/docker-pi-hole\#note-on-capabilities
+    cap_add:
+      - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
+    restart: unless-stopped
+
+  squid:
+    image: ubuntu/squid:6.10-24.10_edge
+    restart: always
+    container_name: squid
+    hostname: squid
+    volumes:
+      - "./config/squid.conf:/etc/squid/squid.conf"
+      - "squid_cache:/var/spool/squid"
+      - "squid_logs:/var/log/squid"
+    ports:
+      - 3128:3128
+
+volumes:
+  personal_postgres_volume:
+  squid_cache:
+  squid_logs:
+  gpg_volume:
+  jwt_volume:
+  web_data:
+    name: pihole-data
+
+secrets:
+  passbolt_app_base_url:
+    environment: "PASSBOLT_APP_BASE_URL"
+
+  postgres_db:
+    environment: "POSTGRES_DB"
+  passbolt_datasource_url:
+    environment: "PASSBOLT_DATASOURCE_URL"
+  postgres_password:
+    environment: "POSTGRES_PASSWORD"
+  postgres_username:
+    environment: "POSTGRES_USERNAME"
+
+  passbolt_email_default_from:
+    environment: "PASSBOLT_EMAIL_DEFAULT_FROM"
+  passbolt_email_transport_default_password:
+    environment: "PASSBOLT_EMAIL_TRANSPORT_DEFAULT_PASSWORD"
+  passbolt_email_transport_default_username:
+    environment: "PASSBOLT_EMAIL_TRANSPORT_DEFAULT_USERNAME"
+  passbolt_email_transport_default_host:
+    environment: "PASSBOLT_EMAIL_TRANSPORT_DEFAULT_HOST"
+  passbolt_email_transport_default_client:
+    environment: "PASSBOLT_EMAIL_TRANSPORT_DEFAULT_CLIENT"
+  passbolt_email_transport_default_port:
+    environment: "PASSBOLT_EMAIL_TRANSPORT_DEFAULT_PORT"
+
+  pihole_webpassword:
+    environment: "PIHOLE_WEBPASSWORD"
