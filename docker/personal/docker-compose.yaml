@@ -13,6 +13,8 @@ services:
       - postgres_db
       - postgres_username
       - postgres_password
+    ports:
+      - 5432:5432
 
   passbolt:
     image: passbolt/passbolt:latest
@@ -125,22 +127,22 @@ services:
       traefik.http.routers.pihole-http.rule: "Host(`192.168.1.99`)"
       traefik.http.services.pihole.loadbalancer.server.port: "80"
 
-  squid:
-    image: ubuntu/squid:6.10-24.10_edge
-    restart: always
-    container_name: squid
-    hostname: squid
-    volumes:
-      - "./config/squid.conf:/etc/squid/squid.conf"
-      - "squid_cache:/var/spool/squid"
-      - "squid_logs:/var/log/squid"
-    ports:
-      - 3128:3128
+#  squid:
+#    image: ubuntu/squid:6.10-24.10_edge
+#    restart: always
+#    container_name: squid
+#    hostname: squid
+#    volumes:
+#      - "./config/squid.conf:/etc/squid/squid.conf"
+#      - "squid_cache:/var/spool/squid"
+#      - "squid_logs:/var/log/squid"
+#    ports:
+#      - 3128:3128
 
 volumes:
   personal_postgres_volume:
-  squid_cache:
-  squid_logs:
+#  squid_cache:
+#  squid_logs:
   gpg_volume:
   jwt_volume:
   web_data:
