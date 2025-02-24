@@ -127,6 +127,23 @@ services:
       traefik.http.routers.pihole-http.rule: "Host(`192.168.1.99`)"
       traefik.http.services.pihole.loadbalancer.server.port: "80"
 
+  syncthing:
+    image: syncthing/syncthing:edge
+    container_name: syncthing
+    hostname: syncthing-host
+    environment:
+      PUID: 1000
+      PGID: 1000
+    volumes:
+      - 'syncthing_data:/wherever/st-sync:/var/syncthing'
+    network_mode: host
+    restart: unless-stopped
+    healthcheck:
+      test: curl -fkLsS -n 2 127.0.0.1:8384/rest/noauth/health | grep -o --color=never OK || exit 1
+      interval: 1m
+      timeout: 10s
+      retries: 3
+
 #  squid:
 #    image: ubuntu/squid:6.10-24.10_edge
 #    restart: always
@@ -141,6 +158,7 @@ services:
 
 volumes:
   personal_postgres_volume:
+  syncthing_data:
 #  squid_cache:
 #  squid_logs:
   gpg_volume:
