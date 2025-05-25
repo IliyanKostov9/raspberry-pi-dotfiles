@@ -30,7 +30,7 @@ entryPoints:
 certificatesResolvers:
   letsencrypt:
     acme:
-      email: <EMAIL REDACTED>
+      email: <Email redacted>
       storage: /shared/acme.json
       caServer: 'https://acme-v02.api.letsencrypt.org/directory'
       keyType: EC256
