@@ -89,26 +89,28 @@ services:
 
   pihole:
     container_name: pi-hole
-    image: pihole/pihole:2024.07.0
-    # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
     network_mode: "host"
+    image: pihole/pihole:latest
+    profiles:
+      - donotstart
     dns:
       - 1.1.1.1
-
     environment:
-      TZ: 'Europe/Sofia'
-      DNSSEC: true
-      #FTLCONF_LOCAL_IPV4: "192.168.1.2"
-      #FTLCONF_LOCAL_IPV6: "fd00::192:168:1:2"
-      WEB_PORT: 8080
-      DNSMASQ_USER: root
-      # DHCP_rapid_commit: true
-      DHCP_ACTIVE: true
-      DHCP_START: '192.168.1.2'
-      DHCP_END: '192.168.1.100'
-      DHCP_ROUTER: '192.168.1.1'
-      PIHOLE_DNS: '1.1.1.1;1.0.0.1'
-      WEBPASSWORD: ${PIHOLE_WEBPASSWORD}
+      TZ: 'Europe/Paris'
+      FTLCONF_dns_dnssec: true
+      FTLCONF_DNSMASQ_USER: root
+      FTLCONF_DHCP_rapid_commit: true
+      FTLCONF_DHCP_ACTIVE: true
+      FTLCONF_webserver_port: 8080
+      FTLCONF_WEB_BIND_ADDR: "0.0.0.0"
+      FTLCONF_REPLY_ADDR4: "192.168.1.99"
+      FTLCONF_DHCP_START: '192.168.1.2'
+      FTLCONF_DHCP_END: '192.168.1.100'
+      FTLCONF_DHCP_ROUTER: '192.168.1.1'
+      FTLCONF_dns_upstreams: '1.1.1.1;1.0.0.1'
+      FTLCONF_WEBPASSWORD: ${PIHOLE_WEBPASSWORD}
+      FTLCONF_webserver_api_password: ${PIHOLE_WEBPASSWORD}
+      FTLCONF_dns_listeningMode: 'all'
     volumes:
       - 'web_data:/data/etc-pihole:/etc/pihole'
       - 'web_data:/data/etc-dnsmasq.d:/etc/dnsmasq.d'
@@ -116,7 +118,6 @@ services:
     secrets:
       - pihole_webpassword
 
-    #   https://github.com/pi-hole/docker-pi-hole\#note-on-capabilities
     cap_add:
       - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
     restart: unless-stopped
@@ -130,6 +131,8 @@ services:
   syncthing:
     image: syncthing/syncthing:edge
     container_name: syncthing
+    profiles:
+      - donotstart
     hostname: syncthing-host
     environment:
       PUID: 1000
@@ -144,23 +147,25 @@ services:
       timeout: 10s
       retries: 3
 
-#  squid:
-#    image: ubuntu/squid:6.10-24.10_edge
-#    restart: always
-#    container_name: squid
-#    hostname: squid
-#    volumes:
-#      - "./config/squid.conf:/etc/squid/squid.conf"
-#      - "squid_cache:/var/spool/squid"
-#      - "squid_logs:/var/log/squid"
-#    ports:
-#      - 3128:3128
+  squid:
+    image: ubuntu/squid:6.10-24.10_edge
+    profiles:
+      - donotstart
+    restart: always
+    container_name: squid
+    hostname: squid
+    volumes:
+      - "./config/squid.conf:/etc/squid/squid.conf"
+      - "squid_cache:/var/spool/squid"
+      - "squid_logs:/var/log/squid"
+    ports:
+      - 3128:3128
 
 volumes:
   personal_postgres_volume:
   syncthing_data:
-#  squid_cache:
-#  squid_logs:
+  squid_cache:
+  squid_logs:
   gpg_volume:
   jwt_volume:
   web_data:
