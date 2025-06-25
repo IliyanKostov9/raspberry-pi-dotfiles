@@ -171,8 +171,12 @@ services:
       # Do not edit the next line. If you want to change the media storage location on your system, edit the value of UPLOAD_LOCATION in the .env file
       - ${UPLOAD_LOCATION}:/usr/src/app/upload
       - /etc/localtime:/etc/localtime:ro
-    env_file:
-      - .env
+    environment:
+      UPLOAD_LOCATION: "/etc/library"
+      DB_DATABASE_NAME: "immich"
+      DB_USERNAME: ${POSTGRES_USERNAME}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      IMMICH_VERSION: "release"
     ports:
       - "2283:2283"
     depends_on:
