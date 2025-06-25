@@ -19,7 +19,7 @@ services:
   passbolt:
     image: passbolt/passbolt:latest
     restart: unless-stopped
-    depends_on: 
+    depends_on:
       - db
     environment:
       APP_FULL_BASE_URL: ${PASSBOLT_APP_BASE_URL}
@@ -96,7 +96,7 @@ services:
     dns:
       - 1.1.1.1
     environment:
-      TZ: 'Europe/Paris'
+      TZ: "Europe/Paris"
       FTLCONF_dns_dnssec: true
       FTLCONF_DNSMASQ_USER: root
       FTLCONF_DHCP_rapid_commit: true
@@ -104,16 +104,16 @@ services:
       FTLCONF_webserver_port: 8080
       FTLCONF_WEB_BIND_ADDR: "0.0.0.0"
       FTLCONF_REPLY_ADDR4: "192.168.1.99"
-      FTLCONF_DHCP_START: '192.168.1.2'
-      FTLCONF_DHCP_END: '192.168.1.100'
-      FTLCONF_DHCP_ROUTER: '192.168.1.1'
-      FTLCONF_dns_upstreams: '1.1.1.1;1.0.0.1'
+      FTLCONF_DHCP_START: "192.168.1.2"
+      FTLCONF_DHCP_END: "192.168.1.100"
+      FTLCONF_DHCP_ROUTER: "192.168.1.1"
+      FTLCONF_dns_upstreams: "1.1.1.1;1.0.0.1"
       FTLCONF_WEBPASSWORD: ${PIHOLE_WEBPASSWORD}
       FTLCONF_webserver_api_password: ${PIHOLE_WEBPASSWORD}
-      FTLCONF_dns_listeningMode: 'all'
+      FTLCONF_dns_listeningMode: "all"
     volumes:
-      - 'web_data:/data/etc-pihole:/etc/pihole'
-      - 'web_data:/data/etc-dnsmasq.d:/etc/dnsmasq.d'
+      - "web_data:/data/etc-pihole:/etc/pihole"
+      - "web_data:/data/etc-dnsmasq.d:/etc/dnsmasq.d"
 
     secrets:
       - pihole_webpassword
@@ -138,7 +138,7 @@ services:
       PUID: 1000
       PGID: 1000
     volumes:
-      - 'syncthing_data:/wherever/st-sync:/var/syncthing'
+      - "syncthing_data:/wherever/st-sync:/var/syncthing"
     network_mode: host
     restart: unless-stopped
     healthcheck:
@@ -161,11 +161,68 @@ services:
     ports:
       - 3128:3128
 
+  immich-server:
+    container_name: immich_server
+    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
+    # extends:
+    #   file: hwaccel.transcoding.yml
+    #   service: cpu # set to one of [nvenc, quicksync, rkmpp, vaapi, vaapi-wsl] for accelerated transcoding
+    volumes:
+      # Do not edit the next line. If you want to change the media storage location on your system, edit the value of UPLOAD_LOCATION in the .env file
+      - ${UPLOAD_LOCATION}:/usr/src/app/upload
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - .env
+    ports:
+      - "2283:2283"
+    depends_on:
+      - redis
+      - db
+    restart: always
+    healthcheck:
+      disable: false
+
+  # immich-machine-learning:
+  #   container_name: immich_machine_learning
+  #   # For hardware acceleration, add one of -[armnn, cuda, rocm, openvino, rknn] to the image tag.
+  #   # Example tag: ${IMMICH_VERSION:-release}-cuda
+  #   image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}
+  #   # extends: # uncomment this section for hardware acceleration - see https://immich.app/docs/features/ml-hardware-acceleration
+  #   #   file: hwaccel.ml.yml
+  #   #   service: cpu # set to one of [armnn, cuda, rocm, openvino, openvino-wsl, rknn] for accelerated inference - use the `-wsl` version for WSL2 where applicable
+  #   volumes:
+  #     - model-cache:/cache
+  #   env_file:
+  #     - .env
+  #   restart: always
+  #   healthcheck:
+  #     disable: false
+
+  redis:
+    container_name: immich_redis
+    image: docker.io/valkey/valkey:8-bookworm@sha256:fec42f399876eb6faf9e008570597741c87ff7662a54185593e74b09ce83d177
+    healthcheck:
+      test: redis-cli ping || exit 1
+    restart: always
+
+  # database:
+  #   container_name: immich_postgres
+  #   image: ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0
+  #   environment:
+  #     POSTGRES_PASSWORD: ${DB_PASSWORD}
+  #     POSTGRES_USER: ${DB_USERNAME}
+  #     POSTGRES_DB: ${DB_DATABASE_NAME}
+  #     POSTGRES_INITDB_ARGS: "--data-checksums"
+  #     # Uncomment the DB_STORAGE_TYPE: 'HDD' var if your database isn't stored on SSDs
+  #     # DB_STORAGE_TYPE: 'HDD'
+  #   volumes:
+  #     # Do not edit the next line. If you want to change the database storage location on your system, edit the value of DB_DATA_LOCATION in the .env file
+  #     - ${DB_DATA_LOCATION}:/var/lib/postgresql/data
+  #   restart: always
+
 volumes:
   personal_postgres_volume:
-  syncthing_data:
-  squid_cache:
-  squid_logs:
+  model-cache:
   gpg_volume:
   jwt_volume:
   web_data:
