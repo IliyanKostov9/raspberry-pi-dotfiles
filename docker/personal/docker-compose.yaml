@@ -1,7 +1,7 @@
 services:
   db:
     #image: postgres:16-alpine3.22
-    image: ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0
+    image: pgvector/pgvector:pg16
     restart: unless-stopped
     shm_size: 128mb
     environment:
