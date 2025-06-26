@@ -1,7 +1,7 @@
 services:
   db:
-    image: postgres:13-alpine3.20
-    # image: postgres:15-alpine3.22
+    # image: postgres:13-alpine3.20
+    image: postgres:16-alpine3.22
     restart: unless-stopped
     shm_size: 128mb
     environment:
@@ -212,6 +212,8 @@ services:
   redis:
     container_name: immich_redis
     image: docker.io/valkey/valkey:8-bookworm@sha256:fec42f399876eb6faf9e008570597741c87ff7662a54185593e74b09ce83d177
+    profiles:
+      - donotstart
     healthcheck:
       test: redis-cli ping || exit 1
     restart: always
