@@ -219,7 +219,22 @@ services:
       test: redis-cli ping || exit 1
     restart: always
 
+  caddy:
+    image: caddy:windowsservercore-ltsc2022
+    restart: unless-stopped
+    ports:
+      - "80:8080"
+      - "443:4433"
+      - "443:4433/udp"
+    volumes:
+      - ./conf:/etc/caddy
+      - ./site:/srv
+      - caddy_data:/data
+      - caddy_config:/config
+
 volumes:
+  caddy_data:
+  caddy_config:
   personal_postgres_volume:
   syncthing_data:
   model-cache:
