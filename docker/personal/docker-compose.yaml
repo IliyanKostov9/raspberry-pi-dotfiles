@@ -220,7 +220,7 @@ services:
     restart: always
 
   caddy:
-    image: caddy:windowsservercore-ltsc2022
+    image: arm64v8/caddy:builder-alpine
     restart: unless-stopped
     ports:
       - "80:8080"
