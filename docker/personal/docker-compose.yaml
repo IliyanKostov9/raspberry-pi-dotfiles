@@ -180,14 +180,13 @@ services:
       IMMICH_VERSION: "release"
       TZ: "Europe/Paris"
       IMMICH_ENV: "production"
-      # IMMICH_MEDIA_LOCATION: ""
     volumes:
       # Do not edit the next line. If you want to change the media storage location on your system, edit the value of UPLOAD_LOCATION in the .env file
       - /etc/library:/usr/src/app/upload
       - /etc/localtime:/etc/localtime:ro
       - "syncthing_data:/var/syncthing"
-    ports:
-      - "2283:2283"
+    #ports:
+    #  - "2283:2283"
     depends_on:
       - redis
       - db
