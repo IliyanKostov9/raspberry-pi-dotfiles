@@ -230,13 +230,15 @@ services:
     devices:
       - /dev/net/tun:/dev/net/tun
     environment:
-      - TS_AUTHKEY=tskey-client-kYteCh4oUr11CNTRL-B5pi3HYWquGgWT4HjsLXvGf74x3hEBW4A?ephemeral=false
+      - TS_AUTHKEY: ${TS_AUTHKEY}
       - TS_EXTRA_ARGS=--advertise-tags=tag:container --reset
       - TS_STATE_DIR=/var/lib/tailscale
       - TS_SERVE_CONFIG=/config/serve-config.json
       - TS_USERSPACE=false
     hostname: immich
     restart: unless-stopped
+    secrets:
+      - tailscale_authkey
 
 volumes:
   personal_postgres_volume:
@@ -275,3 +277,6 @@ secrets:
 
   pihole_webpassword:
     environment: "PIHOLE_WEBPASSWORD"
+
+  tailscale_authkey:
+    environment: "TS_AUTHKEY"
