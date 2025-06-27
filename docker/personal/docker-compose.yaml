@@ -132,14 +132,14 @@ services:
   syncthing:
     image: syncthing/syncthing:edge
     container_name: syncthing
-    profiles:
-      - donotstart
+    #profiles:
+    #  - donotstart
     hostname: syncthing-host
     environment:
       PUID: 1000
       PGID: 1000
     volumes:
-      - "syncthing_data:/wherever/st-sync:/var/syncthing"
+      - "syncthing_data:/var/syncthing"
     network_mode: host
     restart: unless-stopped
     healthcheck:
@@ -184,6 +184,7 @@ services:
       # Do not edit the next line. If you want to change the media storage location on your system, edit the value of UPLOAD_LOCATION in the .env file
       - /etc/library:/usr/src/app/upload
       - /etc/localtime:/etc/localtime:ro
+      - "syncthing_data:/var/syncthing"
     ports:
       - "2283:2283"
     depends_on:
@@ -220,6 +221,7 @@ services:
 
 volumes:
   personal_postgres_volume:
+  syncthing_data:
   model-cache:
   gpg_volume:
   jwt_volume:
