@@ -13,7 +13,12 @@ http:
         ForceSTSHeader: true
         STSIncludeSubdomains: true
         STSPreload: true
-        ContentSecurityPolicy: default-src 'self' 'unsafe-inline'
+        #ContentSecurityPolicy: default-src 'self' 'unsafe-inline'
+        ContentSecurityPolicy: >
+          default-src 'self';
+          script-src 'self' https://cdnjs.cloudflare.com https://unpkg.com;
+          font-src 'self' https://fonts.gstatic.com;
+          style-src 'self' https://cdnjs.cloudflare.com https://fonts.googleapis.com;
         CustomFrameOptionsValue: SAMEORIGIN
         ReferrerPolicy: same-origin
         PermissionsPolicy: vibrate 'self'
