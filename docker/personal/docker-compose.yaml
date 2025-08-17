@@ -265,14 +265,15 @@ services:
       - 8000
     labels:
       traefik.enable: "true"
-      traefik.http.routers.passbolt-http.entrypoints: "web"
-      traefik.http.routers.passbolt-http.rule: "Host(`${HOST}`)"
-      traefik.http.routers.passbolt-http.middlewares: "SslHeader@file"
-      traefik.http.routers.passbolt-https.middlewares: "SslHeader@file"
-      traefik.http.routers.passbolt-https.entrypoints: "websecure"
-      traefik.http.routers.passbolt-https.rule: "Host(`${HOST}`)"
-      traefik.http.routers.passbolt-https.tls: "true"
-      traefik.http.routers.passbolt-https.tls.certresolver: "letsencrypt"
+      traefik.http.services.pihole.loadbalancer.server.port: "8000"
+      traefik.http.routers.portfolio-http.entrypoints: "web"
+      traefik.http.routers.portfolio-http.rule: "Host(`${HOST}`)"
+      traefik.http.routers.portfolio-http.middlewares: "SslHeader@file"
+      traefik.http.routers.portfolio-https.middlewares: "SslHeader@file"
+      traefik.http.routers.portfolio-https.entrypoints: "websecure"
+      traefik.http.routers.portfolio-https.rule: "Host(`${HOST}`)"
+      traefik.http.routers.portfolio-https.tls: "true"
+      traefik.http.routers.portfolio-https.tls.certresolver: "letsencrypt"
 
 volumes:
   personal_postgres_volume:
