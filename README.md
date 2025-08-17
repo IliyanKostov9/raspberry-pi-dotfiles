@@ -11,14 +11,14 @@ sudo vim /boot/firmware/config.txt
 2. Change this toml config:
 
 ```toml
-[all] 
+[all]
 dtoverlay=gpio-fan,gpiopin=14,temp=65000
 ```
 
 
 ## Additional commands
+Check temperature
 
-- check temperature
 ```bash
-/usr/bin/vcgencmd measure_temp
+vcgencmd measure_temp
 ```
