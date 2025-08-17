@@ -1,6 +1,5 @@
 services:
   db:
-    #image: postgres:16-alpine3.22
     image: pgvector/pgvector:pg16
     restart: unless-stopped
     shm_size: 128mb
@@ -239,8 +238,45 @@ services:
     secrets:
       - tailscale_authkey
 
+  portfolio:
+    image: ghcr.io/iliyankostov9/portfolio:release-1.0.0
+    restart: unless-stopped
+    environment:
+      SECRET_KEY: ${SECRET_KEY}
+      HOST: ${HOST}
+      ENV: ${ENV}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+      EMAIL_USER: ${EMAIL_USER}
+      EMAIL_HOST: ${EMAIL_HOST}
+      TO_EMAIL: ${TO_EMAIL}
+      FROM_EMAIL: ${FROM_EMAIL}
+    volumes:
+      - portfolio_volume:/var/lib/portfolio
+    secrets:
+      - secret_key
+      - host
+      - env
+      - email_password
+      - email_user
+      - email_host
+      - to_email
+      - from_email
+    expose:
+      - 8000
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.passbolt-http.entrypoints: "web"
+      traefik.http.routers.passbolt-http.rule: "Host(`${HOST}`)"
+      traefik.http.routers.passbolt-http.middlewares: "SslHeader@file"
+      traefik.http.routers.passbolt-https.middlewares: "SslHeader@file"
+      traefik.http.routers.passbolt-https.entrypoints: "websecure"
+      traefik.http.routers.passbolt-https.rule: "Host(`${HOST}`)"
+      traefik.http.routers.passbolt-https.tls: "true"
+      traefik.http.routers.passbolt-https.tls.certresolver: "letsencrypt"
+
 volumes:
   personal_postgres_volume:
+  portfolio_volume:
   syncthing_data:
   model-cache:
   gpg_volume:
@@ -279,3 +315,20 @@ secrets:
 
   tailscale_authkey:
     environment: "TS_AUTHKEY"
+
+  secret_key:
+    environment: "SECRET_KEY"
+  host:
+    environment: "HOST"
+  env:
+    environment: "ENV"
+  email_password:
+    environment: "EMAIL_PASSWORD"
+  email_user:
+    environment: "EMAIL_USER"
+  email_host:
+    environment: "EMAIL_HOST"
+  to_email:
+    environment: "TO_EMAIL"
+  from_email:
+    environment: "FROM_EMAIL"
