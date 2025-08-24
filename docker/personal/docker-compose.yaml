@@ -242,29 +242,28 @@ services:
       - tailscale_authkey
 
   portfolio:
-    image: ghcr.io/iliyankostov9/portfolio:release-1.0.0
-    #image: IliyanKostov9-local/portfolio:1.0.0
+    image: ghcr.io/iliyankostov9/portfolio:release-1.0.1
     restart: unless-stopped
     environment:
-      SECRET_KEY: ${SECRET_KEY}
-      HOST: ${HOST}
-      ENV: ${ENV}
-      EMAIL_PASSWORD: ${EMAIL_PASSWORD}
-      EMAIL_USER: ${EMAIL_USER}
-      EMAIL_HOST: ${EMAIL_HOST}
-      TO_EMAIL: ${TO_EMAIL}
-      FROM_EMAIL: ${FROM_EMAIL}
+      PORTFOLIO_SECRET_KEY: ${PORTFOLIO_SECRET_KEY}
+      PORTFOLIO_HOST: ${PORTFOLIO_HOST}
+      PORTFOLIO_ENV: ${PORTFOLIO_ENV}
+      PORTFOLIO_EMAIL_PASSWORD: ${PORTFOLIO_EMAIL_PASSWORD}
+      PORTFOLIO_EMAIL_USER: ${PORTFOLIO_EMAIL_USER}
+      PORTFOLIO_EMAIL_HOST: ${PORTFOLIO_EMAIL_HOST}
+      PORTFOLIO_TO_EMAIL: ${PORTFOLIO_TO_EMAIL}
+      PORTFOLIO_FROM_EMAIL: ${PORTFOLIO_FROM_EMAIL}
     volumes:
       - portfolio_volume:/var/lib/portfolio
     secrets:
-      - secret_key
-      - host
-      - env
-      - email_password
-      - email_user
-      - email_host
-      - to_email
-      - from_email
+      - portfolio_secret_key
+      - portfolio_host
+      - portfolio_env
+      - portfolio_email_password
+      - portfolio_email_user
+      - portfolio_email_host
+      - portfolio_to_email
+      - portfolio_from_email
     expose:
       - 8000
     labels:
@@ -321,19 +320,19 @@ secrets:
   tailscale_authkey:
     environment: "TS_AUTHKEY"
 
-  secret_key:
-    environment: "SECRET_KEY"
-  host:
-    environment: "HOST"
-  env:
-    environment: "ENV"
-  email_password:
-    environment: "EMAIL_PASSWORD"
-  email_user:
-    environment: "EMAIL_USER"
-  email_host:
-    environment: "EMAIL_HOST"
-  to_email:
-    environment: "TO_EMAIL"
-  from_email:
-    environment: "FROM_EMAIL"
+  portfolio_secret_key:
+    environment: "PORTFOLIO_SECRET_KEY"
+  portfolio_host:
+    environment: "PORTFOLIO_HOST"
+  portfolio_env:
+    environment: "PORTFOLIO_ENV"
+  portfolio_email_password:
+    environment: "PORTFOLIO_EMAIL_PASSWORD"
+  portfolio_email_user:
+    environment: "PORTFOLIO_EMAIL_USER"
+  portfolio_email_host:
+    environment: "PORTFOLIO_EMAIL_HOST"
+  portfolio_to_email:
+    environment: "PORTFOLIO_TO_EMAIL"
+  portfolio_from_email:
+    environment: "PORTFOLIO_FROM_EMAIL"
