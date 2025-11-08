@@ -242,8 +242,8 @@ services:
       - tailscale_authkey
 
   portfolio:
-    #image: ghcr.io/iliyankostov9/portfolio:release-1.0.1
-    image: IliyanKostov9-local/portfolio:1.0.1
+    image: ghcr.io/iliyankostov9/portfolio:release-1.1.0
+    #image: IliyanKostov9-local/portfolio:1.0.1
     restart: unless-stopped
     environment:
       PORTFOLIO_SECRET_KEY: ${PORTFOLIO_SECRET_KEY}
@@ -254,8 +254,9 @@ services:
       PORTFOLIO_EMAIL_HOST: ${PORTFOLIO_EMAIL_HOST}
       PORTFOLIO_TO_EMAIL: ${PORTFOLIO_TO_EMAIL}
       PORTFOLIO_FROM_EMAIL: ${PORTFOLIO_FROM_EMAIL}
-    #volumes:
-    #  - portfolio_volume:/var/lib/portfolio
+      PORTFOLIO_LOKI_URL: ${PORTFOLIO_LOKI_URL}
+    volumes:
+      - portfolio_volume:/var/lib/portfolio
     secrets:
       - portfolio_secret_key
       - portfolio_host
@@ -265,6 +266,7 @@ services:
       - portfolio_email_host
       - portfolio_to_email
       - portfolio_from_email
+      - portfolio_loki_url
     expose:
       - 8000
     labels:
@@ -281,7 +283,7 @@ services:
 
 volumes:
   personal_postgres_volume:
-  #portfolio_volume:
+  portfolio_volume:
   syncthing_data:
   model-cache:
   gpg_volume:
@@ -337,3 +339,5 @@ secrets:
     environment: "PORTFOLIO_TO_EMAIL"
   portfolio_from_email:
     environment: "PORTFOLIO_FROM_EMAIL"
+  portfolio_loki_url:
+    environment: "PORTFOLIO_LOKI_URL"
