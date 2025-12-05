@@ -76,7 +76,7 @@ services:
       traefik.http.routers.passbolt-https.tls.certresolver: "letsencrypt"
 
   traefik:
-    image: traefik:3.5.0
+    image: traefik:3.6.1
     restart: always
     ports:
       - 80:80
@@ -167,7 +167,8 @@ services:
   immich-server:
     container_name: immich_server
     network_mode: "service:immich-ts"
-    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
+    #image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
+    image: ghcr.io/immich-app/immich-server:v2.3.1
     #profiles:
     #  - donotstart
     # extends:
@@ -187,8 +188,6 @@ services:
       - /etc/library:/usr/src/app/upload
       - /etc/localtime:/etc/localtime:ro
       - "syncthing_data:/var/syncthing"
-    #ports:
-    #  - "2283:2283"
     depends_on:
       - redis
       - db
@@ -242,8 +241,8 @@ services:
       - tailscale_authkey
 
   portfolio:
-    image: ghcr.io/iliyankostov9/portfolio:release-1.1.0
-    #image: IliyanKostov9-local/portfolio:1.0.1
+    image: ghcr.io/iliyankostov9/portfolio:release-v2.2.2
+    #image: IliyanKostov9-local/portfolio:2.2.0
     restart: unless-stopped
     environment:
       PORTFOLIO_SECRET_KEY: ${PORTFOLIO_SECRET_KEY}
