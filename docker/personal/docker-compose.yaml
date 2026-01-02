@@ -1,5 +1,6 @@
 services:
   db:
+    container_name: db
     image: pgvector/pgvector:pg16
     restart: unless-stopped
     shm_size: 128mb
@@ -95,6 +96,7 @@ services:
     #  - 53:53
     #  - 8080:8080
     #profiles:
+
     #  - donotstart
     dns:
       - 1.1.1.1
@@ -167,10 +169,7 @@ services:
   immich-server:
     container_name: immich_server
     network_mode: "service:immich-ts"
-    #image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
-    image: ghcr.io/immich-app/immich-server:v2.3.1
-    #profiles:
-    #  - donotstart
+    image: ghcr.io/immich-app/immich-server:v2.4.1
     # extends:
     #   file: hwaccel.transcoding.yml
     #   service: cpu # set to one of [nvenc, quicksync, rkmpp, vaapi, vaapi-wsl] for accelerated transcoding
@@ -213,15 +212,15 @@ services:
 
   redis:
     container_name: immich_redis
-    image: docker.io/valkey/valkey:8-bookworm@sha256:fec42f399876eb6faf9e008570597741c87ff7662a54185593e74b09ce83d177
-    #profiles:
+    image: docker.io/valkey/valkey:8-bookworm@sha256:fec42f399876eb6faf9e008570597741c87ff7662a54185593e74b09ce83d177 
+    #network_mode: "service:immich-ts"
     #  - donotstart
     healthcheck:
       test: redis-cli ping || exit 1
     restart: always
 
   immich-ts:
-    image: tailscale/tailscale
+    image: tailscale/tailscale:stable
     container_name: immich-ts
     cap_add:
       - net_admin
@@ -340,3 +339,4 @@ secrets:
     environment: "PORTFOLIO_FROM_EMAIL"
   portfolio_loki_url:
     environment: "PORTFOLIO_LOKI_URL"
+
