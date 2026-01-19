@@ -241,7 +241,7 @@ services:
       - tailscale_authkey
 
   portfolio:
-    image: ghcr.io/iliyankostov9/portfolio:release-v2.2.2
+    image: ghcr.io/iliyankostov9/portfolio:release-v2.3.0
     #image: IliyanKostov9-local/portfolio:2.2.0
     restart: unless-stopped
     environment:
@@ -254,6 +254,10 @@ services:
       PORTFOLIO_TO_EMAIL: ${PORTFOLIO_TO_EMAIL}
       PORTFOLIO_FROM_EMAIL: ${PORTFOLIO_FROM_EMAIL}
       PORTFOLIO_LOKI_URL: ${PORTFOLIO_LOKI_URL}
+      PORTFOLIO_S3_AWS_BUCKET: ${PORTFOLIO_S3_AWS_BUCKET}
+      PORTFOLIO_S3_AWS_SECRET_ACCESS_KEY: ${PORTFOLIO_S3_AWS_SECRET_ACCESS_KEY}
+      PORTFOLIO_S3_AWS_KEY_ID: ${PORTFOLIO_S3_AWS_KEY_ID}
+
     volumes:
       - /mnt/storage/repos/portfolio:/var/lib/portfolio
     secrets:
@@ -266,6 +270,9 @@ services:
       - portfolio_to_email
       - portfolio_from_email
       - portfolio_loki_url
+      - portfolio_s3_aws_bucket
+      - portfolio_s3_aws_secret_access_key
+      - portfolio_s3_aws_key_id
     expose:
       - 8000
     labels:
@@ -338,4 +345,9 @@ secrets:
     environment: "PORTFOLIO_FROM_EMAIL"
   portfolio_loki_url:
     environment: "PORTFOLIO_LOKI_URL"
-
+  portfolio_s3_aws_bucket:
+    environment: "PORTFOLIO_S3_AWS_BUCKET"
+  portfolio_s3_aws_secret_access_key:
+    environment: "PORTFOLIO_S3_AWS_SECRET_ACCESS_KEY"
+  portfolio_s3_aws_key_id:
+    environment: "PORTFOLIO_S3_AWS_KEY_ID"
