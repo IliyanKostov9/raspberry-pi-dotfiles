@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
 # Path to your Oh My Zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
+export ZSH="$HOME/repos/raspberry-pi-dotfiles/oh-my-zsh"
 export MANPAGER="vim +Man!"
 export EDITOR="vim"
 export VISUAL="vim"
