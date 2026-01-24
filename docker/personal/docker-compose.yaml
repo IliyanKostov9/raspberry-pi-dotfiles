@@ -1,7 +1,7 @@
 services:
   db:
     container_name: db
-    image: pgvector/pgvector:pg16
+    image: pgvector/pgvector:pg18-trixie
     restart: unless-stopped
     shm_size: 128mb
     environment:
@@ -9,7 +9,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USERNAME}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      - personal_postgres_volume:/var/lib/postgresql/data
+      - /mnt/storage/postgres18:/var/lib/postgresql
     secrets:
       - postgres_db
       - postgres_username
@@ -167,6 +167,7 @@ services:
     ports:
       - 3128:3128
 
+  # NOTE: Prior to that create a new database named `immich`
   immich-server:
     container_name: immich_server
     network_mode: "service:immich-ts"
@@ -183,6 +184,8 @@ services:
       IMMICH_VERSION: "release"
       TZ: "Europe/Paris"
       IMMICH_ENV: "production"
+      IMMICH_HOST: 0.0.0.0
+      IMMICH_PORT: 2283
     volumes:
       # Do not edit the next line. If you want to change the media storage location on your system, edit the value of UPLOAD_LOCATION in the .env file
       - /etc/library:/usr/src/app/upload
@@ -239,6 +242,8 @@ services:
     restart: unless-stopped
     secrets:
       - tailscale_authkey
+    labels:
+      - traefik.enable=false
 
   portfolio:
     image: ghcr.io/iliyankostov9/portfolio:release-v2.3.0
