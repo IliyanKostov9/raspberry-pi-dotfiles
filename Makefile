@@ -6,4 +6,4 @@ sync:
 
 .PHONY: copy
 copy:
-	cp ./dotfiles/ ~/
+	cp -r ./dotfiles/. ~/
