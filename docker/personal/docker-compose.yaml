@@ -171,7 +171,7 @@ services:
   immich-server:
     container_name: immich_server
     network_mode: "service:immich-ts"
-    image: ghcr.io/immich-app/immich-server:v2.5.2
+    image: ghcr.io/immich-app/immich-server:v2.5.6
     # extends:
     #   file: hwaccel.transcoding.yml
     #   service: cpu # set to one of [nvenc, quicksync, rkmpp, vaapi, vaapi-wsl] for accelerated transcoding
@@ -246,7 +246,7 @@ services:
       - traefik.enable=false
 
   portfolio:
-    image: ghcr.io/iliyankostov9/portfolio:release-v2.3.0
+    image: ghcr.io/iliyankostov9/portfolio:release-v2.3.1
     #image: IliyanKostov9-local/portfolio:2.2.0
     restart: unless-stopped
     environment:
