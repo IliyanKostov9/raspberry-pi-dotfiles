@@ -1,0 +1,9 @@
+keys:
+- &pi age1tjqseczjr2pr4pd5904hl39jdm8uls7e2s3qly7dsum538p03atqg6vck2
+
+creation_rules:
+  - path_regex: .+\.yaml$
+    key_groups:
+      - age:
+        - *pi
+
