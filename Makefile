@@ -6,4 +6,5 @@ sync:
 
 .PHONY: copy
 copy:
-	cp -r ./dotfiles/. ~/
+	cp -r ./dotfiles/.* ~/
+	sudo cp ./dotfiles/nix-conf /etc/nix/
