@@ -1,0 +1,247 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: passbolt-pvc-db
+  namespace: passbolt
+  labels:
+    env: prod
+
+spec:
+  storageClassName: db
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 4Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: passbolt-pvc-gpg
+  namespace: passbolt
+  labels:
+    env: prod
+
+spec:
+  storageClassName: "gpg"
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: passbolt-pvc-jwt
+  namespace: passbolt
+  labels:
+    env: prod
+
+spec:
+  storageClassName: "jwt"
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: passbolt-deployment
+  namespace: passbolt
+  labels:
+    env: prod
+
+spec:
+  replicas: 1
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      env: prod
+
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container: passbolt-deployment
+      labels:
+        env: prod
+
+    spec:
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: gpg-volume
+          persistentVolumeClaim:
+            claimName: passbolt-pvc-gpg
+
+        - name: jwt-volume
+          persistentVolumeClaim:
+            claimName: passbolt-pvc-jwt
+
+      containers:
+        - name: passbolt-app
+          image: passbolt/passbolt:latest
+          imagePullPolicy: IfNotPresent
+          command: ["/usr/bin/wait-for.sh"]
+          args:
+            [
+              "-t",
+              "0",
+              "passbolt-db-service:5432",
+              "--",
+              "/docker-entrypoint.sh",
+            ]
+          ports:
+            - name: internal-port
+              containerPort: 80
+
+          # resources:
+          #   requests:
+          #     cpu: 400m
+          #     memory: 1Gi
+          #
+          #   limits:
+          #     cpu: 800m
+          #     memory: 2Gi
+
+          env:
+            - name: DB_HOST
+              value: passbolt-db-service
+
+            - name: DB_PORT
+              value: "5432"
+
+            - name: APP_FULL_BASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: passbolt-secrets
+                  key: PASSBOLT_APP_BASE_URL
+
+            - name: DATASOURCES_DEFAULT_DRIVER
+              value: Cake\Database\Driver\Postgres
+
+            - name: DATASOURCES_DEFAULT_ENCODING
+              value: utf8
+
+            - name: DATASOURCES_DEFAULT_URL
+              valueFrom:
+                secretKeyRef:
+                  name: passbolt-secrets
+                  key: PASSBOLT_DATASOURCE_URL
+
+            - name: EMAIL_DEFAULT_FROM_NAME
+              value: Passbolt
+
+            - name: EMAIL_DEFAULT_FROM
+              valueFrom:
+                secretKeyRef:
+                  name: passbolt-secrets
+                  key: PASSBOLT_EMAIL_DEFAULT_FROM
+
+            - name: EMAIL_TRANSPORT_DEFAULT_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: passbolt-secrets
+                  key: PASSBOLT_EMAIL_TRANSPORT_DEFAULT_HOST
+
+            - name: EMAIL_TRANSPORT_DEFAULT_CLIENT
+              valueFrom:
+                secretKeyRef:
+                  name: passbolt-secrets
+                  key: PASSBOLT_EMAIL_TRANSPORT_DEFAULT_CLIENT
+
+            - name: EMAIL_TRANSPORT_DEFAULT_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: passbolt-secrets
+                  key: PASSBOLT_EMAIL_TRANSPORT_DEFAULT_PORT
+
+            - name: EMAIL_TRANSPORT_DEFAULT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: passbolt-secrets
+                  key: PASSBOLT_EMAIL_TRANSPORT_DEFAULT_USERNAME
+
+            - name: EMAIL_TRANSPORT_DEFAULT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: passbolt-secrets
+                  key: PASSBOLT_EMAIL_TRANSPORT_DEFAULT_PASSWORD
+
+            - name: EMAIL_TRANSPORT_DEFAULT_TLS
+              value: "true"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: passbolt-db-deployment
+  namespace: passbolt
+  labels:
+    env: prod-db
+
+spec:
+  replicas: 1
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      env: prod-db
+
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container: passbolt-db-deployment
+      labels:
+        env: prod-db
+
+    spec:
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: db-volume
+          persistentVolumeClaim:
+            claimName: passbolt-pvc-db
+
+      containers:
+        - name: passbolt-db
+          image: pgvector/pgvector:pg18-trixie
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: db-port
+              containerPort: 5432
+          volumeMounts:
+            - name: db-volume
+              mountPath: /var/lib/postgresql/18/docker
+
+          # resources:
+          #   requests:
+          #     cpu: 400m
+          #     memory: 1Gi
+          #
+          #   limits:
+          #     cpu: 800m
+          #     memory: 2Gi
+
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: passbolt-secrets
+                  key: POSTGRES_DB
+
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: passbolt-secrets
+                  key: POSTGRES_PASSWORD
+
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: passbolt-secrets
+                  key: POSTGRES_USERNAME

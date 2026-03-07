@@ -1,0 +1,96 @@
+additionalArguments:
+  - "--certificatesresolvers.letsencrypt.acme.email=iliyan.kostov@email.ikostov.org"
+  - "--certificatesresolvers.letsencrypt.acme.storage=/data/acme.json"
+  - "--certificatesresolvers.letsencrypt.acme.keytype=EC256"
+  - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+  # - "--certificatesresolvers.letsencrypt.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+
+deployment:
+  ports:
+    web:
+      port: 80
+      hostPort: 80
+    websecure:
+      port: 443
+      hostPort: 443
+
+  additionalVolumes:
+    - name: acme
+      hostPath:
+        path: /home/pi/certs
+  additionalVolumeMounts:
+    - name: acme
+      mountPath: /data
+
+ingressRoute:
+  global:
+    sendAnonymousUsage: false
+  log:
+    level: INFO
+    format: common
+    providers:
+      docker:
+        endpoint: "unix:///var/run/docker.sock"
+        watch: true
+        exposedByDefault: false
+    file:
+      directory: /etc/traefik/conf/
+      watch: true
+
+  tls:
+    options:
+      default:
+        minVersion: VersionTLS12
+        sniStrict: true
+        curvePreferences:
+          - CurveP521
+          - CurveP384
+        cipherSuites:
+          - TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
+          - TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+          - TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256
+
+  headers:
+    FrameDeny: true
+    AccessControlAllowMethods: "GET,OPTIONS,PUT"
+    AccessControlAllowOriginList:
+      - origin-list-or-null
+    AccessControlMaxAge: 100
+    AddVaryHeader: true
+    BrowserXssFilter: true
+    ContentTypeNosniff: true
+    ForceSTSHeader: true
+    STSIncludeSubdomains: true
+    STSPreload: true
+    #ContentSecurityPolicy: default-src 'self' 'unsafe-inline'
+    ContentSecurityPolicy: >
+      default-src 'self';
+      script-src 'self' https://cdnjs.cloudflare.com https://unpkg.com;
+      font-src 'self' https://fonts.gstatic.com;
+      style-src 'self' https://cdnjs.cloudflare.com https://fonts.googleapis.com;
+    CustomFrameOptionsValue: SAMEORIGIN
+    ReferrerPolicy: same-origin
+    PermissionsPolicy: vibrate 'self'
+    STSSeconds: 315360000
+
+  entryPoints:
+    web:
+      address: ":80"
+      # http:
+      #   redirections:
+      #     entryPoint:
+      #       to: websecure
+      #       scheme: https
+      #       permanent: true
+    websecure:
+      address: ":443"
+
+  certificatesResolvers:
+    letsencrypt:
+      acme:
+        email: iliyan.kostov@email.ikostov.org
+        storage: /data/acme.json
+        caServer: "https://acme-v02.api.letsencrypt.org/directory"
+        keyType: EC256
+        httpChallenge:
+          entryPoint: web
