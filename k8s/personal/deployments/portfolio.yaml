@@ -1,0 +1,129 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: portfolio-pvc
+  namespace: portfolio
+  labels:
+    env: prod
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: portfolio-deployment
+  namespace: portfolio
+  labels:
+    version: v2.3.1
+    env: prod
+  
+spec:
+  replicas: 1
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      version: v2.3.1
+      env: prod
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container: portfolio-deployment
+      labels:
+        version: v2.3.1
+        env: prod
+
+    spec:
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: django-app
+          image: ghcr.io/iliyankostov9/portfolio:release-v2.3.1
+          imagePullPolicy: Always
+
+          ports:
+            - name: liveness-port
+              port: 8000
+       
+          resources:
+            requests:
+              cpu: 2000m
+              memory: 2G
+
+            limits:
+              cpu: 4000m
+              memory: 4G
+        
+          env:
+            - name: PORTFOLIO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: portfolio-secrets
+                  value: PORTFOLIO_SECRET_KEY
+
+            - name: PORTFOLIO_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: portfolio-secrets
+                  value: PORTFOLIO_HOST
+
+            - name: PORTFOLIO_EMAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: portfolio-secrets
+                  value: PORTFOLIO_EMAIL_PASSWORD
+
+            - name: PORTFOLIO_EMAIL_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: portfolio-secrets
+                  value: PORTFOLIO_EMAIL_HOST
+
+            - name: PORTFOLIO_TO_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: portfolio-secrets
+                  value: PORTFOLIO_TO_EMAIL
+
+            - name: PORTFOLIO_FROM_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: portfolio-secrets
+                  value: PORTFOLIO_FROM_EMAIL
+
+            - name: PORTFOLIO_LOKI_URL
+              valueFrom:
+                secretKeyRef:
+                  name: portfolio-secrets
+                  value: PORTFOLIO_LOKI_URL
+
+            - name: PORTFOLIO_S3_AWS_BUCKET
+              valueFrom:
+                secretKeyRef:
+                  name: portfolio-secrets
+                  value: PORTFOLIO_S3_AWS_BUCKET
+
+            - name: PORTFOLIO_S3_AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: portfolio-secrets
+                  value: PORTFOLIO_S3_AWS_SECRET_ACCESS_KEY
+
+            - name: PORTFOLIO_S3_AWS_KEY_ID
+              valueFrom:
+               secretKeyRef:
+                 name: portfolio-secrets
+                 value: PORTFOLIO_S3_AWS_KEY_ID
