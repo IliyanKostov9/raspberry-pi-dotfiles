@@ -1,0 +1,71 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: passbolt-db-service
+  namespace: passbolt
+spec:
+  selector:
+    env: prod-db
+
+  type: ClusterIP
+  ports:
+    - name: database
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: passbolt-web-service
+  namespace: passbolt
+spec:
+  selector:
+    env: prod
+
+  type: ClusterIP
+  ports:
+    - name: asgi
+      port: 80
+      protocol: TCP
+      targetPort: 80
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: passbolt-ingress-route
+  namespace: passbolt
+  labels:
+    env: prod
+
+spec:
+  headers:
+    # sslRedirect: true
+    sslProxyHeaders:
+      X-Forwarded-Proto: https
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: passbolt-ingress-route
+  namespace: passbolt
+  labels:
+    env: prod
+
+spec:
+  entryPoints:
+    - web
+    - websecure
+  tls:
+    certResolver: letsencrypt
+  routes:
+    - kind: Rule
+      match: Host(`passbolt2.ikostov.org`) && !PathPrefix(`/.well-known/acme-challenge/`)
+      services:
+        - name: passbolt-web-service
+          port: 80
+      # middlewares:
+      #   - name: passbolt-ingress-route
+      #     namespace: passbolt

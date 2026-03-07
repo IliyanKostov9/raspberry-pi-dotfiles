@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: syncthing-service
+  namespace: syncthing
+  labels:
+    env: local
+
+spec:
+  type: NodePort
+  selector:
+    env: local
+
+  ports:
+    - name: local
+      port: 8384
+      protocol: TCP
+      targetPort: 8384
+      nodePort: 30084
