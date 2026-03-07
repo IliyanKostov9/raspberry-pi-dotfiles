@@ -72,58 +72,58 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: portfolio-secrets
-                  value: PORTFOLIO_SECRET_KEY
+                  key: PORTFOLIO_SECRET_KEY
 
             - name: PORTFOLIO_HOST
               valueFrom:
                 secretKeyRef:
                   name: portfolio-secrets
-                  value: PORTFOLIO_HOST
+                  key: PORTFOLIO_HOST
 
             - name: PORTFOLIO_EMAIL_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: portfolio-secrets
-                  value: PORTFOLIO_EMAIL_PASSWORD
+                  key: PORTFOLIO_EMAIL_PASSWORD
 
             - name: PORTFOLIO_EMAIL_HOST
               valueFrom:
                 secretKeyRef:
                   name: portfolio-secrets
-                  value: PORTFOLIO_EMAIL_HOST
+                  key: PORTFOLIO_EMAIL_HOST
 
             - name: PORTFOLIO_TO_EMAIL
               valueFrom:
                 secretKeyRef:
                   name: portfolio-secrets
-                  value: PORTFOLIO_TO_EMAIL
+                  key: PORTFOLIO_TO_EMAIL
 
             - name: PORTFOLIO_FROM_EMAIL
               valueFrom:
                 secretKeyRef:
                   name: portfolio-secrets
-                  value: PORTFOLIO_FROM_EMAIL
+                  key: PORTFOLIO_FROM_EMAIL
 
             - name: PORTFOLIO_LOKI_URL
               valueFrom:
                 secretKeyRef:
                   name: portfolio-secrets
-                  value: PORTFOLIO_LOKI_URL
+                  key: PORTFOLIO_LOKI_URL
 
             - name: PORTFOLIO_S3_AWS_BUCKET
               valueFrom:
                 secretKeyRef:
                   name: portfolio-secrets
-                  value: PORTFOLIO_S3_AWS_BUCKET
+                  key: PORTFOLIO_S3_AWS_BUCKET
 
             - name: PORTFOLIO_S3_AWS_SECRET_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
                   name: portfolio-secrets
-                  value: PORTFOLIO_S3_AWS_SECRET_ACCESS_KEY
+                  key: PORTFOLIO_S3_AWS_SECRET_ACCESS_KEY
 
             - name: PORTFOLIO_S3_AWS_KEY_ID
               valueFrom:
                 secretKeyRef:
                   name: portfolio-secrets
-                  value: PORTFOLIO_S3_AWS_KEY_ID
+                  key: PORTFOLIO_S3_AWS_KEY_ID
