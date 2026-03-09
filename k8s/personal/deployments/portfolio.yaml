@@ -57,6 +57,9 @@ spec:
           ports:
             - name: internal-port
               containerPort: 8000
+
+            - name: internal-loki-port
+              containerPort: 3100
        
           resources:
             requests:
