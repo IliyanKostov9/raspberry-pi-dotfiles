@@ -1,0 +1,11 @@
+ingressRoute:
+  dashboard:
+    enabled: false
+    matchRule: Host('portfolio.ikostov.org')
+    entryPoints:
+      - web
+    #gateway:
+    #  listeners:
+    #    web:
+    #      namespacePolicy:
+    #        from: All
