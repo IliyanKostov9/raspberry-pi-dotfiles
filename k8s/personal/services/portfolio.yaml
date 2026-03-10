@@ -19,11 +19,6 @@ spec:
       protocol: TCP
       targetPort: 8000
 
-    - name: https
-      port: 443
-      protocol: TCP
-      targetPort: 443
-
     - name: loki
       port: 3100
       protocol: TCP
@@ -55,21 +50,14 @@ metadata:
     env: prod
 
 spec:
+  tls:
+    certResolver: letsencrypt
   routes:
     - kind: Rule
       match: Host(`portfolio.ikostov.org`)
       services:
         - name: portfolio-service
           port: 8000
-      middlewares:
-        - name: portfolio-ingress-route
-          namespace: portfolio
-
-    - kind: Rule
-      match: Host(`portfolio.ikostov.org`)
-      services:
-        - name: portfolio-service
-          port: 443
       middlewares:
         - name: portfolio-ingress-route
           namespace: portfolio
