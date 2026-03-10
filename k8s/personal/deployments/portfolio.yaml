@@ -52,13 +52,14 @@ spec:
       containers:
         - name: django-app
           image: ghcr.io/iliyankostov9/portfolio:release-v2.3.1
-          imagePullPolicy: Always
+          #image: localhost:5000/portfolio:latest3
+          imagePullPolicy: IfNotPresent
 
           ports:
             - name: internal-port
               containerPort: 8000
 
-            - name: internal-loki-port
+            - name: inter-loki
               containerPort: 3100
        
           resources:
