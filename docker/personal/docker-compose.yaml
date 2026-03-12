@@ -109,14 +109,14 @@ services:
       FTLCONF_DHCP_ACTIVE: true
       FTLCONF_webserver_port: 8080
       FTLCONF_WEB_BIND_ADDR: "0.0.0.0"
-      #FTLCONF_REPLY_ADDR4: "192.168.1.99"
+      FTLCONF_REPLY_ADDR4: "192.168.1.99"
       FTLCONF_DHCP_START: "192.168.1.2"
       FTLCONF_DHCP_END: "192.168.1.100"
       FTLCONF_DHCP_ROUTER: "192.168.1.1"
       FTLCONF_dns_upstreams: "1.1.1.1;1.0.0.1"
       FTLCONF_WEBPASSWORD: ${PIHOLE_WEBPASSWORD}
       FTLCONF_webserver_api_password: ${PIHOLE_WEBPASSWORD}
-      FTLCONF_dns_listeningMode: "all"
+      FTLCONF_dns_listeningMode: "local"
     volumes:
       - "web_data:/data/etc-pihole:/etc/pihole"
       - "web_data:/data/etc-dnsmasq.d:/etc/dnsmasq.d"
@@ -172,6 +172,8 @@ services:
     container_name: immich_server
     network_mode: "service:immich-ts"
     image: ghcr.io/immich-app/immich-server:v2.5.6
+    #ports:
+    #  - 2283:2283
     # extends:
     #   file: hwaccel.transcoding.yml
     #   service: cpu # set to one of [nvenc, quicksync, rkmpp, vaapi, vaapi-wsl] for accelerated transcoding
@@ -200,9 +202,9 @@ services:
 
   redis:
     container_name: immich_redis
-    image: docker.io/valkey/valkey:8-bookworm@sha256:fec42f399876eb6faf9e008570597741c87ff7662a54185593e74b09ce83d177
-    #network_mode: "service:immich-ts"
-    #  - donotstart
+    image: docker.io/redis:6.2-alpine@sha256:2d1463258f2764328496376f5d965f20c6a67f66ea2b06dc42af351f75248792
+    #ports:
+    #  - 6379:6379
     healthcheck:
       test: redis-cli ping || exit 1
     restart: always
