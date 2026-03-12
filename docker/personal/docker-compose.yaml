@@ -164,7 +164,7 @@ services:
   # NOTE: Prior to that create a new database named `immich`
   immich-server:
     container_name: immich_server
-    # network_mode: "service:immich-ts"
+    network_mode: "service:immich-ts"
     networks:
       - immich_net
     image: ghcr.io/immich-app/immich-server:v2.5.6
@@ -172,7 +172,7 @@ services:
     #   file: hwaccel.transcoding.yml
     #   service: cpu # set to one of [nvenc, quicksync, rkmpp, vaapi, vaapi-wsl] for accelerated transcoding
     environment:
-      DB_HOSTNAME: 127.0.0.1
+      DB_HOSTNAME: db
       UPLOAD_LOCATION: "/etc/library"
       DB_DATABASE_NAME: "immich"
       DB_USERNAME: ${POSTGRES_USERNAME}
@@ -197,8 +197,7 @@ services:
   redis:
     container_name: immich_redis
     image: docker.io/redis:6.2-alpine@sha256:2d1463258f2764328496376f5d965f20c6a67f66ea2b06dc42af351f75248792
-    networks:
-      - immich_net
+    network_mode: "service:immich-ts"
     healthcheck:
       test: redis-cli ping || exit 1
     restart: always
@@ -207,8 +206,6 @@ services:
     image: tailscale/tailscale:stable
     container_name: immich-ts
     hostname: immich
-    networks:
-      - immich_net
     cap_add:
       - net_admin
     volumes:
