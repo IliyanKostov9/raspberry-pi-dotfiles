@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: passbolt-pv-gpg
+  namespace: passbolt
+  labels:
+    env: prod
+
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /data/passbolt/gpg
+  persistentVolumeReclaimPolicy: Retain
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: passbolt-pv-jwt
+  namespace: passbolt
+  labels:
+    env: prod
+
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /data/passbolt/jwt
+  persistentVolumeReclaimPolicy: Retain
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: passbolt-pv-db
+  namespace: passbolt
+  labels:
+    env: prod
+
+spec:
+  capacity:
+    storage: 4Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /mnt/storage/postgres18:/var/lib/postgresql
+  persistentVolumeReclaimPolicy: Retain
