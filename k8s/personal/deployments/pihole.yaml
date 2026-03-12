@@ -22,7 +22,7 @@ metadata:
     env: local
 
 spec:
-  replicas:
+  replicas: 1
   minReadySeconds: 10
   selector:
     matchLabels:
