@@ -1,3 +1,7 @@
+networks:
+  immich_net:
+    driver: bridge
+
 services:
   db:
     container_name: db
@@ -93,12 +97,6 @@ services:
     network_mode: "host"
     image: pihole/pihole:latest
     shm_size: 512mb
-    #ports:
-    #  - 53:53
-    #  - 8080:8080
-    #profiles:
-
-    #  - donotstart
     dns:
       - 1.1.1.1
     environment:
@@ -120,14 +118,12 @@ services:
     volumes:
       - "web_data:/data/etc-pihole:/etc/pihole"
       - "web_data:/data/etc-dnsmasq.d:/etc/dnsmasq.d"
-
     secrets:
       - pihole_webpassword
 
     cap_add:
       - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
     restart: unless-stopped
-
     labels:
       traefik.enable: "true"
       traefik.http.routers.pihole-http.entrypoints: "web"
@@ -137,8 +133,6 @@ services:
   syncthing:
     image: syncthing/syncthing:edge
     container_name: syncthing
-    #profiles:
-    #  - donotstart
     hostname: syncthing-host
     environment:
       PUID: 1000
@@ -170,7 +164,9 @@ services:
   # NOTE: Prior to that create a new database named `immich`
   immich-server:
     container_name: immich_server
-    network_mode: "service:immich-ts"
+    # network_mode: "service:immich-ts"
+    networks:
+      - immich_net
     image: ghcr.io/immich-app/immich-server:v2.5.6
     # extends:
     #   file: hwaccel.transcoding.yml
@@ -201,8 +197,8 @@ services:
   redis:
     container_name: immich_redis
     image: docker.io/redis:6.2-alpine@sha256:2d1463258f2764328496376f5d965f20c6a67f66ea2b06dc42af351f75248792
-    ports:
-      - 6379:6379
+    networks:
+      - immich_net
     healthcheck:
       test: redis-cli ping || exit 1
     restart: always
@@ -210,6 +206,9 @@ services:
   immich-ts:
     image: tailscale/tailscale:stable
     container_name: immich-ts
+    hostname: immich
+    networks:
+      - immich_net
     cap_add:
       - net_admin
     volumes:
@@ -222,7 +221,6 @@ services:
       TS_STATE_DIR: "/var/lib/tailscale"
       TS_SERVE_CONFIG: "/config/serve-config.json"
       TS_USERSPACE: false
-    hostname: immich
     restart: unless-stopped
     secrets:
       - tailscale_authkey
