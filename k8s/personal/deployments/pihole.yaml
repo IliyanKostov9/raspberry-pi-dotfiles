@@ -1,0 +1,141 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pihole-pvc
+  namespace: pihole
+  labels:
+    env: local
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pihole-deployment
+  labels:
+    env: local
+
+spec:
+  replicas:
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      env: local
+
+  template:
+    metadata:
+    annotations:
+      kubectl.kubernetes.io/default-container: portfolio-deployment
+    labels:
+      env: local
+
+  spec:
+    restartPolicy: Always
+    terminationGracePeriodSeconds: 30
+    containers:
+      - name: pihole
+        image: pihole/pihole:latest
+        imagePullPolicy: IfNotPresent
+
+        ports:
+          - name: default
+            containerPort: 8080
+
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 1G
+          limits:
+            cpu: 1500m
+            memory: 2G
+
+        env:
+          - name: TZ
+            valueFrom:
+              configMapKeyRef:
+                name: pihole-config
+                key: TZ
+
+          - name: FTLCONF_dns_dnssec
+            valueFrom:
+              configMapKeyRef:
+                name: pihole-config
+                key: FTLCONF_dns_dnssec
+
+          - name: FTLCONF_DNSMASQ_USER
+            valueFrom:
+              configMapKeyRef:
+                name: pihole-config
+                key: FTLCONF_DNSMASQ_USER
+
+          - name: FTLCONF_DHCP_rapid_commit
+            valueFrom:
+              configMapKeyRef:
+                name: pihole-config
+                key: FTLCONF_DHCP_rapid_commit
+
+          - name: FTLCONF_DHCP_ACTIVE
+            valueFrom:
+              configMapKeyRef:
+                name: pihole-config
+                key: FTLCONF_DHCP_ACTIVE
+
+          - name: FTLCONF_webserver_port
+            valueFrom:
+              configMapKeyRef:
+                name: pihole-config
+                key: FTLCONF_webserver_port
+
+          - name: FTLCONF_WEB_BIND_ADDR
+            valueFrom:
+              configMapKeyRef:
+                name: pihole-config
+                key: FTLCONF_WEB_BIND_ADDR
+
+          - name: FTLCONF_DHCP_START
+            valueFrom:
+              configMapKeyRef:
+                name: pihole-config
+                key: FTLCONF_DHCP_START
+
+          - name: FTLCONF_DHCP_END
+            valueFrom:
+              configMapKeyRef:
+                name: pihole-config
+                key: FTLCONF_DHCP_END
+
+          - name: FTLCONF_DHCP_ROUTER
+            valueFrom:
+              configMapKeyRef:
+                name: pihole-config
+                key: FTLCONF_DHCP_ROUTER
+
+          - name: FTLCONF_dns_upstreams
+            valueFrom:
+              configMapKeyRef:
+                name: pihole-config
+                key: FTLCONF_dns_upstreams
+
+          - name: FTLCONF_dns_listeningMode
+            valueFrom:
+              configMapKeyRef:
+                name: pihole-config
+                key: FTLCONF_dns_listeningMode
+
+          - name: FTLCONF_WEBPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: pihole-secrets
+                key: PIHOLE_WEBPASSWORD
+
+          - name: FTLCONF_webserver_api_password
+            valueFrom:
+              secretKeyRef:
+                name: pihole-secrets
+                key: PIHOLE_WEBPASSWORD
