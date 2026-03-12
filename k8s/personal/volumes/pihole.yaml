@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pihole-pv-etc-pihole
+  labels:
+    env: local
+
+spec:
+  capacity: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /home/pi/repos/raspberry-pi-dotfiles/k8s/personal/config/etc-pihole
+    persistentVolumeReclaimPolicy: Retain
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pihole-pv-etc-dnsmasq
+  labels:
+    env: local
+  hostPath:
+    path: /home/pi/repos/raspberry-pi-dotfiles/k8s/personal/config/etc-dnsmasq.d
+    persistentVolumeReclaimPolicy: Retain
