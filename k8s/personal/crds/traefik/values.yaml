@@ -31,7 +31,7 @@ ingressRoute:
     format: common
   providers:
     docker:
-      endpoint: 'unix:///var/run/docker.sock'
+      endpoint: "unix:///var/run/docker.sock"
       watch: true
       exposedByDefault: false
     file:
@@ -39,7 +39,7 @@ ingressRoute:
       watch: true
   dashboard:
     enabled: false
-    matchRule: Host(`portfolio.ikostov.org`)
+    matchRule: Host(`passbolt.ikostov.org`)
     gateway:
       listeners:
         web:
@@ -47,21 +47,21 @@ ingressRoute:
             from: All
 
   tls:
-   options:
-     default:
-       minVersion: VersionTLS12
-       sniStrict: true
-       curvePreferences:
-         - CurveP521
-         - CurveP384
-       cipherSuites:
-         - TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
-         - TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
-         - TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256
+    options:
+      default:
+        minVersion: VersionTLS12
+        sniStrict: true
+        curvePreferences:
+          - CurveP521
+          - CurveP384
+        cipherSuites:
+          - TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
+          - TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+          - TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256
 
   headers:
     FrameDeny: true
-    AccessControlAllowMethods: 'GET,OPTIONS,PUT'
+    AccessControlAllowMethods: "GET,OPTIONS,PUT"
     AccessControlAllowOriginList:
       - origin-list-or-null
     AccessControlMaxAge: 100
@@ -84,7 +84,7 @@ ingressRoute:
 
   entryPoints:
     web:
-      address: ':80'
+      address: ":80"
       http:
         redirections:
           entryPoint:
@@ -92,14 +92,14 @@ ingressRoute:
             scheme: https
             permanent: true
     websecure:
-      address: ':443'
+      address: ":443"
 
   certificatesResolvers:
     letsencrypt:
       acme:
         email: iliyan.kostov@email.ikostov.org
         storage: /data/acme.json
-        caServer: 'https://acme-v02.api.letsencrypt.org/directory'
+        caServer: "https://acme-v02.api.letsencrypt.org/directory"
         keyType: EC256
         httpChallenge:
           entryPoint: web
