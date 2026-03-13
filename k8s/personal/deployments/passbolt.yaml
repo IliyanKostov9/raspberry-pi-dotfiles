@@ -8,11 +8,12 @@ metadata:
     env: prod
 
 spec:
+  storageClassName: "db"
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 2Gi
+      storage: 4Gi
 
 ---
 apiVersion: v1
@@ -24,6 +25,7 @@ metadata:
     env: prod
 
 spec:
+  storageClassName: "gpg"
   accessModes:
     - ReadWriteOnce
   resources:
@@ -39,11 +41,13 @@ metadata:
     env: prod
 
 spec:
+  storageClassName: "jwt"
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
       storage: 1Gi
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -70,6 +74,14 @@ spec:
     spec:
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
+      volumes:
+        - name: gpg-volume
+          persistentVolumeClaim:
+            claimName: gpg
+
+        - name: jwt-volume
+          persistentVolumeClaim:
+            claimName: jwt
 
       containers:
         - name: passbolt-app
@@ -77,29 +89,9 @@ spec:
           imagePullPolicy: IfNotPresent
           command: ["/usr/bin/wait-for.sh"]
           args: ["-t", "0", "db:5432", "--", "/docker-entrypoint.sh"]
-          volumes:
-            - name: gpg-volume
-              persistentVolumeClaim:
-                claimName: passbolt-pvc-gpg
-
-            - name: jwt-volume
-              persistentVolumeClaim:
-                claimName: passbolt-pvc-jwt
           ports:
             - name: internal-port
               containerPort: 80
-
-        - name: passbolt-db
-          image: pgvector/pgvector:pg18-trixie
-          imagePullPolicy: IfNotPresent
-          volumes:
-            - name: gpg-volume
-              persistentVolumeClaim:
-                claimName: passbolt-pvc-db
-
-          ports:
-            - name: db-internal-port
-              containerPort: 5432
 
           resources:
             requests:
@@ -171,6 +163,55 @@ spec:
             - name: EMAIL_TRANSPORT_DEFAULT_TLS
               value: "true"
 
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: passbolt-db-deployment
+  namespace: passbolt
+  labels:
+    env: prod
+
+spec:
+  replicas: 1
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      env: prod
+
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container: passbolt-db-deployment
+      labels:
+        env: prod
+
+    spec:
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: db-volume
+          persistentVolumeClaim:
+            className: db
+
+      containers:
+        - name: passbolt-db
+          image: pgvector/pgvector:pg18-trixie
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: db-internal-port
+              containerPort: 5432
+
+          resources:
+            requests:
+              cpu: 2000m
+              memory: 2G
+
+            limits:
+              cpu: 4000m
+              memory: 4G
+
+          env:
             - name: POSTGRES_DB
               valueFrom:
                 secretKeyRef:

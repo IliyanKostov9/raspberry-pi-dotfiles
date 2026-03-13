@@ -1,12 +1,13 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: passbolt-pv-gpg
+  name: passbolt-pvc-gpg
   namespace: passbolt
   labels:
     env: prod
 
 spec:
+  storageClassName: "gpg"
   capacity:
     storage: 1Gi
   accessModes:
@@ -19,12 +20,13 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: passbolt-pv-jwt
+  name: passbolt-pvc-jwt
   namespace: passbolt
   labels:
     env: prod
 
 spec:
+  storageClassName: "jwt"
   capacity:
     storage: 1Gi
   accessModes:
@@ -37,12 +39,13 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: passbolt-pv-db
+  name: passbolt-pvc-db
   namespace: passbolt
   labels:
     env: prod
 
 spec:
+  storageClassName: db
   capacity:
     storage: 4Gi
   accessModes:
