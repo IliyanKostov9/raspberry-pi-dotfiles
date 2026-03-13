@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: passbolt-pvc-gpg
+  name: passbolt-pv-gpg
   namespace: passbolt
   labels:
     env: prod
@@ -20,7 +20,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: passbolt-pvc-jwt
+  name: passbolt-pv-jwt
   namespace: passbolt
   labels:
     env: prod
@@ -39,7 +39,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: passbolt-pvc-db
+  name: passbolt-pv-db
   namespace: passbolt
   labels:
     env: prod

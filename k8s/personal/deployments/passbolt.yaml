@@ -95,12 +95,12 @@ spec:
 
           resources:
             requests:
-              cpu: 2000m
-              memory: 2G
+              cpu: 200m
+              memory: 256Mi
 
             limits:
-              cpu: 4000m
-              memory: 4G
+              cpu: 500m
+              memory: 512Mi
 
           env:
             - name: APP_FULL_BASE_URL
@@ -204,12 +204,12 @@ spec:
 
           resources:
             requests:
-              cpu: 2000m
-              memory: 2G
+              cpu: 200m
+              memory: 256Mi
 
             limits:
-              cpu: 4000m
-              memory: 4G
+              cpu: 500m
+              memory: 512Mi
 
           env:
             - name: POSTGRES_DB
