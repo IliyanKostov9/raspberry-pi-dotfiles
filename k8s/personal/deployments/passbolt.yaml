@@ -164,6 +164,24 @@ spec:
             - name: EMAIL_TRANSPORT_DEFAULT_TLS
               value: "true"
 
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: passbolt-secrets
+                  key: POSTGRES_DB
+
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: passbolt-secrets
+                  key: POSTGRES_PASSWORD
+
+            - name: POSTGRES_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: passbolt-secrets
+                  key: POSTGRES_USERNAME
+
 ---
 apiVersion: apps/v1
 kind: Deployment
