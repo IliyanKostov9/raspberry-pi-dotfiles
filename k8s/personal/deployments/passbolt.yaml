@@ -89,7 +89,13 @@ spec:
           imagePullPolicy: IfNotPresent
           command: ["/usr/bin/wait-for.sh"]
           args:
-            ["-t", "0", "passbolt-service:5432", "--", "/docker-entrypoint.sh"]
+            [
+              "-t",
+              "0",
+              "passbolt-db-service:5432",
+              "--",
+              "/docker-entrypoint.sh",
+            ]
           ports:
             - name: internal-port
               containerPort: 80
@@ -104,6 +110,12 @@ spec:
           #     memory: 2Gi
 
           env:
+            - name: DB_HOST
+              value: passbolt-db-sevice
+
+            - name: DB_PORT
+              value: "5432"
+
             - name: APP_FULL_BASE_URL
               valueFrom:
                 secretKeyRef:

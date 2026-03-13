@@ -2,7 +2,27 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: passbolt-service
+  name: passbolt-db-service
+  namespace: passbolt
+  labels:
+    env: prod
+
+spec:
+  selector:
+    env: prod
+
+  ports:
+    - name: database
+      type: ClusterIP
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: passbolt-web-service
   namespace: passbolt
   labels:
     env: prod
@@ -13,15 +33,10 @@ spec:
 
   ports:
     - name: asgi
+      type: ClusterIP
       port: 80
       protocol: TCP
       targetPort: 80
-
-    - name: database
-      port: 5432
-      protocol: TCP
-      targetPort: 5432
-
 ---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
@@ -52,7 +67,7 @@ spec:
     - kind: Rule
       match: Host(`passbolt.ikostov.org`)
       services:
-        - name: passbolt-service
+        - name: passbolt-web-service
           port: 80
       middlewares:
         - name: passbolt-ingress-route
