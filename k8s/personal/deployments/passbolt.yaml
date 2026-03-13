@@ -94,14 +94,14 @@ spec:
             - name: internal-port
               containerPort: 80
 
-          resources:
-            requests:
-              cpu: 400m
-              memory: 1Gi
-
-            limits:
-              cpu: 800m
-              memory: 2Gi
+          # resources:
+          #   requests:
+          #     cpu: 400m
+          #     memory: 1Gi
+          #
+          #   limits:
+          #     cpu: 800m
+          #     memory: 2Gi
 
           env:
             - name: APP_FULL_BASE_URL
@@ -203,14 +203,14 @@ spec:
             - name: db-port
               containerPort: 5432
 
-          resources:
-            requests:
-              cpu: 400m
-              memory: 1Gi
-
-            limits:
-              cpu: 800m
-              memory: 2Gi
+          # resources:
+          #   requests:
+          #     cpu: 400m
+          #     memory: 1Gi
+          #
+          #   limits:
+          #     cpu: 800m
+          #     memory: 2Gi
 
           env:
             - name: POSTGRES_DB
