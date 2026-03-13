@@ -96,12 +96,12 @@ spec:
 
           resources:
             requests:
-              cpu: 200m
-              memory: 256Mi
+              cpu: 400m
+              memory: 1Gi
 
             limits:
-              cpu: 500m
-              memory: 512Mi
+              cpu: 800m
+              memory: 2Gi
 
           env:
             - name: APP_FULL_BASE_URL
@@ -205,11 +205,11 @@ spec:
 
           resources:
             requests:
-              cpu: 200m
-              memory: 256Mi
+              cpu: 400m
+              memory: 1Gi
 
             limits:
-              cpu: 500m
+              cpu: 800m
               memory: 512Mi
 
           env:
