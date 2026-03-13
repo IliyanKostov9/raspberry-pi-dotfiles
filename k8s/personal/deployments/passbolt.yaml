@@ -8,7 +8,7 @@ metadata:
     env: prod
 
 spec:
-  storageClassName: "db"
+  storageClassName: db
   accessModes:
     - ReadWriteOnce
   resources:
@@ -88,7 +88,8 @@ spec:
           image: passbolt/passbolt:latest
           imagePullPolicy: IfNotPresent
           command: ["/usr/bin/wait-for.sh"]
-          args: ["-t", "0", "db:5432", "--", "/docker-entrypoint.sh"]
+          args:
+            ["-t", "0", "passbolt-service:5432", "--", "/docker-entrypoint.sh"]
           ports:
             - name: internal-port
               containerPort: 80

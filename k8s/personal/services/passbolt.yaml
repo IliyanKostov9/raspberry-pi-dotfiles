@@ -17,6 +17,11 @@ spec:
       protocol: TCP
       targetPort: 80
 
+    - name: database
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+
 ---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
