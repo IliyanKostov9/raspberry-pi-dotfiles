@@ -6,6 +6,8 @@ additionalArguments:
   #- "--certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare"
   #- "--certificatesresolvers.letsencrypt.acme.dnschallenge=true"
 
+service:
+  type: ClusterIP
 deployment:
   ports:
     web:
