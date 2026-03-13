@@ -11,9 +11,9 @@ spec:
   selector:
     env: prod
 
+  type: ClusterIP
   ports:
     - name: database
-      type: ClusterIP
       port: 5432
       protocol: TCP
       targetPort: 5432
@@ -31,9 +31,9 @@ spec:
   selector:
     env: prod
 
+  type: ClusterIP
   ports:
     - name: asgi
-      type: ClusterIP
       port: 80
       protocol: TCP
       targetPort: 80
