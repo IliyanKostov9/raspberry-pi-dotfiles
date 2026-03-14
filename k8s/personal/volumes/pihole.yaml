@@ -7,11 +7,12 @@ metadata:
     env: local
 
 spec:
-  capacity: 2Gi
+  storageClassName: "pihole"
+  capacity: 1Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: /home/pi/repos/raspberry-pi-dotfiles/k8s/personal/config/etc-pihole
+    path: /home/pi/repos/raspberry-pi-dotfiles/config/etc-pihole
     persistentVolumeReclaimPolicy: Retain
 
 ---
@@ -22,6 +23,12 @@ metadata:
   namespace: pihole
   labels:
     env: local
+
+spec:
+  storageClassName: "dnsmasq"
+  capacity: 1Gi
+  accessModes:
+    - ReadWriteOnce
   hostPath:
-    path: /home/pi/repos/raspberry-pi-dotfiles/k8s/personal/config/etc-dnsmasq.d
+    path: /home/pi/repos/raspberry-pi-dotfiles/config/etc-dnsmasq.d
     persistentVolumeReclaimPolicy: Retain
