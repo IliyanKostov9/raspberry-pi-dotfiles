@@ -75,6 +75,9 @@ spec:
             - name: default
               containerPort: 80
 
+            - name: dns
+              containerPort: 53
+
           env:
             - name: TZ
               valueFrom:
