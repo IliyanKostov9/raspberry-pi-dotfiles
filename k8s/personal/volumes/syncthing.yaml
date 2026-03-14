@@ -7,8 +7,9 @@ metadata:
     env: local
 
 spec:
+  storageClassName: "sync"
   accessModes:
     - ReadWriteOnce
   hostPath:
     path: /mnt/storage/syncthing
-    persistentVolumeReclaimPolicy: Retain
+  persistentVolumeReclaimPolicy: Retain
