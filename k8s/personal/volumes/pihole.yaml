@@ -15,7 +15,7 @@ spec:
     - ReadWriteOnce
   hostPath:
     path: /home/pi/repos/raspberry-pi-dotfiles/config/etc-pihole
-    persistentVolumeReclaimPolicy: Retain
+  persistentVolumeReclaimPolicy: Retain
 
 ---
 apiVersion: v1
@@ -34,4 +34,4 @@ spec:
     - ReadWriteOnce
   hostPath:
     path: /home/pi/repos/raspberry-pi-dotfiles/config/etc-dnsmasq.d
-    persistentVolumeReclaimPolicy: Retain
+  persistentVolumeReclaimPolicy: Retain
