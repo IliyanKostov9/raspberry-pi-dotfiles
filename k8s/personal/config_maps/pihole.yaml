@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: pihole-config-map
+  name: pihole-config
   namespace: pihole
   labels:
     env: local
