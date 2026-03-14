@@ -1,7 +1,7 @@
 apiVersion: v1
-kind: PersistentVolume
+kind: PersistentVolumeClaim
 metadata:
-  name: syncthing-pv
+  name: syncthing-pvc
   namespace: syncthing
   labels:
     env: local
@@ -9,9 +9,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -31,7 +29,7 @@ spec:
   template:
     metadata:
     annotations:
-      kubectl.kubernetes.io/default-container: portfolio-deployment
+      kubectl.kubernetes.io/default-container: syncthing-deployment
     labels:
       env: local
 
@@ -46,14 +44,6 @@ spec:
         ports:
           - name: default
             containerPort: 8384
-
-        resources:
-          requests:
-            cpu: 1000m
-            memory: 1G
-          limits:
-            cpu: 1000m
-            memory: 2G
 
         env:
           - name: PUID
