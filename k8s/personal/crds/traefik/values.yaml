@@ -17,7 +17,7 @@ deployment:
   additionalVolumes:
     - name: acme
       hostPath:
-        path: /home/pi/certs/passbolt
+        path: /home/pi/certs
   additionalVolumeMounts:
     - name: acme
       mountPath: /data
