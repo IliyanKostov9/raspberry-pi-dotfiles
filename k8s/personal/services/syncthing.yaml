@@ -15,20 +15,4 @@ spec:
       port: 8384
       protocol: TCP
       targetPort: 8384
-
----
-apiVersion: v1
-kind: IngressRoute
-metadata:
-  name: syncthing-middleware
-  namespace: syncthing
-  labels:
-    env: local
-
-spec:
-  routes:
-    - kind: Rule
-      match: Host(`192.168.1.99`)
-      services:
-        - name: syncthing-service
-          port: 8384
+      nodePort: 30084
