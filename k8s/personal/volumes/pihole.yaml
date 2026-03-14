@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -8,7 +9,8 @@ metadata:
 
 spec:
   storageClassName: "pihole"
-  capacity: 1Gi
+  capacity:
+    storage: 1Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
@@ -26,7 +28,8 @@ metadata:
 
 spec:
   storageClassName: "dnsmasq"
-  capacity: 1Gi
+  capacity:
+    storage: 1Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
