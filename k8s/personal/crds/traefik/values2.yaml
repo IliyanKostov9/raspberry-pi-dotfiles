@@ -1,7 +1,7 @@
 additionalArguments:
   - "--certificatesresolvers.letsencrypt.acme.email=iliyan.kostov@email.ikostov.org"
   - "--certificatesresolvers.letsencrypt.acme.storage=/data/acme.json"
-  - "--certificatesresolvers.letsencrypt.acme.keytype=EC256"
+  - "--certificatesresolvers.letsencrypt.acme.keytype=P256"
   - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
   # - "--certificatesresolvers.letsencrypt.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
 
@@ -99,6 +99,6 @@ ingressRoute:
         email: iliyan.kostov@email.ikostov.org
         storage: /data/acme.json
         caServer: "https://acme-v02.api.letsencrypt.org/directory"
-        keyType: EC256
+        keyType: P256
         httpChallenge:
           entryPoint: web
