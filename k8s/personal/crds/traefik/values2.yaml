@@ -17,7 +17,7 @@ deployment:
   additionalVolumes:
     - name: acme
       hostPath:
-        path: /home/pi/repos/raspberry-pi-dotfiles/k8s/personal/config/shared
+        path: /home/pi/certs/passbolt
   additionalVolumeMounts:
     - name: acme
       mountPath: /data
