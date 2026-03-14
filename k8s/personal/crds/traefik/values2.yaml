@@ -84,12 +84,12 @@ ingressRoute:
   entryPoints:
     web:
       address: ":80"
-      http:
-        redirections:
-          entryPoint:
-            to: websecure
-            scheme: https
-            permanent: true
+      # http:
+      #   redirections:
+      #     entryPoint:
+      #       to: websecure
+      #       scheme: https
+      #       permanent: true
     websecure:
       address: ":443"
 
@@ -102,9 +102,3 @@ ingressRoute:
         keyType: EC256
         httpChallenge:
           entryPoint: web
-        dnsChallenge:
-          provider: cloudflare
-          resolvers:
-            - "1.1.1.1:53"
-            - "1.0.0.1:53"
-        tlsChallenge: {}
