@@ -8,6 +8,8 @@ metadata:
 
 spec:
   storageClassName: "sync"
+  capacity:
+    storage: 400Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
