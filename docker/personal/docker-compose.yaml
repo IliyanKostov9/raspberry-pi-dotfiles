@@ -12,8 +12,8 @@ services:
       - /mnt/storage/postgres18:/var/lib/postgresql
     secrets:
       - postgres_db
-        - postgres_username
-        - postgres_password
+      - postgres_username
+      - postgres_password
     ports:
       - 5432:5432
 
