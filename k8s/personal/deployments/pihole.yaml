@@ -73,7 +73,7 @@ spec:
 
           ports:
             - name: default
-              containerPort: 8080
+              containerPort: 80
 
           env:
             - name: TZ
