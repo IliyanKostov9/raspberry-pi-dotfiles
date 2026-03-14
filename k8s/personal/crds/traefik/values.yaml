@@ -6,8 +6,6 @@ additionalArguments:
   #- "--certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare"
   #- "--certificatesresolvers.letsencrypt.acme.dnschallenge=true"
 
-service:
-  type: ClusterIP
 deployment:
   ports:
     web:
@@ -41,7 +39,7 @@ ingressRoute:
       watch: true
   dashboard:
     enabled: false
-    matchRule: Host(`passbolt.ikostov.org`)
+    matchRule: Host(`portfolio.ikostov.org`)
     gateway:
       listeners:
         web:
@@ -105,4 +103,9 @@ ingressRoute:
         keyType: EC256
         httpChallenge:
           entryPoint: web
+        dnsChallenge:
+          provider: cloudflare
+          resolvers:
+            - "1.1.1.1:53"
+            - "1.0.0.1:53"
         tlsChallenge: {}
