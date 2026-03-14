@@ -3,6 +3,7 @@ additionalArguments:
   - "--certificatesresolvers.letsencrypt.acme.storage=/data/acme.json"
   - "--certificatesresolvers.letsencrypt.acme.keytype=EC256"
   - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+  # - "--certificatesresolvers.letsencrypt.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
 
 deployment:
   ports:
@@ -16,7 +17,7 @@ deployment:
   additionalVolumes:
     - name: acme
       hostPath:
-        path: /home/pi/repos/raspberry-pi-dotfiles/k8s/personal/config/shared
+        path: /home/pi/certs/passbolt
   additionalVolumeMounts:
     - name: acme
       mountPath: /data
@@ -35,14 +36,6 @@ ingressRoute:
     file:
       directory: /etc/traefik/conf/
       watch: true
-  dashboard:
-    enabled: false
-    matchRule: Host(`portfolio.ikostov.org`)
-    gateway:
-      listeners:
-        web:
-          namespacePolicy:
-            from: All
 
   tls:
     options:
@@ -83,12 +76,12 @@ ingressRoute:
   entryPoints:
     web:
       address: ":80"
-      http:
-        redirections:
-          entryPoint:
-            to: websecure
-            scheme: https
-            permanent: true
+      # http:
+      #   redirections:
+      #     entryPoint:
+      #       to: websecure
+      #       scheme: https
+      #       permanent: true
     websecure:
       address: ":443"
 
@@ -101,9 +94,3 @@ ingressRoute:
         keyType: EC256
         httpChallenge:
           entryPoint: web
-        dnsChallenge:
-          provider: cloudflare
-          resolvers:
-            - "1.1.1.1:53"
-            - "1.0.0.1:53"
-        tlsChallenge: {}
