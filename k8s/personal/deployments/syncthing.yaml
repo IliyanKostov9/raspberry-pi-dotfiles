@@ -31,26 +31,26 @@ spec:
 
   template:
     metadata:
-    annotations:
-      kubectl.kubernetes.io/default-container: syncthing-deployment
-    labels:
-      env: local
+      annotations:
+        kubectl.kubernetes.io/default-container: syncthing-deployment
+      labels:
+        env: local
 
-  spec:
-    restartPolicy: Always
-    terminationGracePeriodSeconds: 30
-    containers:
-      - name: syncthing
-        image: syncthing/syncthing:edge
-        imagePullPolicy: IfNotPresent
+    spec:
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: syncthing
+          image: syncthing/syncthing:edge
+          imagePullPolicy: IfNotPresent
 
-        ports:
-          - name: default
-            containerPort: 8384
+          ports:
+            - name: default
+              containerPort: 8384
 
-        env:
-          - name: PUID
-            value: 1000
+          env:
+            - name: PUID
+              value: 1000
 
-          - name: PGID
-            value: 1000
+            - name: PGID
+              value: 1000
