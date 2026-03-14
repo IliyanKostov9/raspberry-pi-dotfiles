@@ -106,11 +106,11 @@ spec:
                   name: pihole-config
                   key: FTLCONF_DHCP_ACTIVE
 
-            - name: FTLCONF_webserver_port
-              valueFrom:
-                configMapKeyRef:
-                  name: pihole-config
-                  key: FTLCONF_webserver_port
+            # - name: FTLCONF_webserver_port
+            #   valueFrom:
+            #     configMapKeyRef:
+            #       name: pihole-config
+            #       key: FTLCONF_webserver_port
 
             - name: FTLCONF_WEB_BIND_ADDR
               valueFrom:
