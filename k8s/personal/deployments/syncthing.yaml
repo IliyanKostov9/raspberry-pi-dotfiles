@@ -39,6 +39,10 @@ spec:
             - name: default
               containerPort: 8384
 
+          volumeMounts:
+            - name: syncthing-volume
+              mounthPath: /syncthing
+
           env:
             - name: PUID
               value: "1000"
