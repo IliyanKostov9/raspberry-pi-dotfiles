@@ -37,6 +37,8 @@ spec:
         env: local
 
     spec:
+      securityContext:
+        fsGroup: 1000
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       containers:
