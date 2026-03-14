@@ -164,7 +164,5 @@ cython_debug/
 
 .runner
 docker/personal/shared/
-k8s/personal/config/shared/
 docker/personal/etc-pihole/
-k8s/personal/config/etc-pihole/
 .devenv
