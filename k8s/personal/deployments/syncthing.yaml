@@ -41,7 +41,7 @@ spec:
 
           volumeMounts:
             - name: syncthing-volume
-              mounthPath: /syncthing
+              mountPath: /syncthing
 
           env:
             - name: PUID
