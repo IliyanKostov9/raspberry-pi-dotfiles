@@ -3,8 +3,6 @@ additionalArguments:
   - "--certificatesresolvers.letsencrypt.acme.storage=/data/acme.json"
   - "--certificatesresolvers.letsencrypt.acme.keytype=EC256"
   - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
-  #- "--certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare"
-  #- "--certificatesresolvers.letsencrypt.acme.dnschallenge=true"
 
 deployment:
   ports:
@@ -29,11 +27,11 @@ ingressRoute:
   log:
     level: INFO
     format: common
-    # providers:
-    #   docker:
-    #     endpoint: "unix:///var/run/docker.sock"
-    #     watch: true
-    #     exposedByDefault: false
+    providers:
+      docker:
+        endpoint: "unix:///var/run/docker.sock"
+        watch: true
+        exposedByDefault: false
     file:
       directory: /etc/traefik/conf/
       watch: true
