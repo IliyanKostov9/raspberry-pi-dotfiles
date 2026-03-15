@@ -51,5 +51,5 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: /mnt/storage/postgres18:/var/lib/postgresql
+    path: /mnt/micro-sd/storage/postgres18:/var/lib/postgresql
   persistentVolumeReclaimPolicy: Retain
