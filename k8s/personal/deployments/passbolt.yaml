@@ -202,9 +202,6 @@ spec:
     spec:
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
-      volumeMounts:
-        - name: db-volume
-          mountPath: /var/lib/postgresql/18/docker
       volumes:
         - name: db-volume
           persistentVolumeClaim:
@@ -217,6 +214,9 @@ spec:
           ports:
             - name: db-port
               containerPort: 5432
+          volumeMounts:
+            - name: db-volume
+              mountPath: /var/lib/postgresql/18/docker
 
           # resources:
           #   requests:
