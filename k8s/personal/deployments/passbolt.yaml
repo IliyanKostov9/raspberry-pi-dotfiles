@@ -215,7 +215,7 @@ spec:
       annotations:
         kubectl.kubernetes.io/default-container: passbolt-db-deployment
       labels:
-        env: prod
+        env: prod-db
 
     spec:
       restartPolicy: Always
