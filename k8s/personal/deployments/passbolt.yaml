@@ -111,7 +111,7 @@ spec:
 
           env:
             - name: DB_HOST
-              value: passbolt-db-sevice
+              value: passbolt-db-service
 
             - name: DB_PORT
               value: "5432"
