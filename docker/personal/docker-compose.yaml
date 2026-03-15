@@ -162,16 +162,14 @@ services:
     container_name: immich_server
     network_mode: "service:immich-ts"
     image: ghcr.io/immich-app/immich-server:v2.5.6
-    profiles:
-      - donotstart
+    #profiles:
+    #  - donotstart
     # extends:
     #   file: hwaccel.transcoding.yml
     #   service: cpu # set to one of [nvenc, quicksync, rkmpp, vaapi, vaapi-wsl] for accelerated transcoding
     environment:
-      DB_HOSTNAME: 192.168.1.99
-      DB_PORT: 5432
-      REDIS_HOST: 192.168.1.99
-      REDIS_PORT: 6379
+      DB_HOSTNAME: db
+      #REDIS_HOST: 172.18.0.6
       UPLOAD_LOCATION: "/etc/library"
       DB_DATABASE_NAME: "immich"
       DB_USERNAME: ${POSTGRES_USERNAME}
@@ -195,11 +193,12 @@ services:
 
   redis:
     container_name: immich_redis
-    image: docker.io/redis:6.2-alpine@sha256:2d1463258f2764328496376f5d965f20c6a67f66ea2b06dc42af351f75248792
-    ports:
-      - 6379:6379
-    profiles:
-      - donotstart
+    image: docker.io/valkey/valkey:8-bookworm@sha256:fec42f399876eb6faf9e008570597741c87ff7662a54185593e74b09ce83d177
+    #image: docker.io/redis:6.2-alpine@sha256:2d1463258f2764328496376f5d965f20c6a67f66ea2b06dc42af351f75248792
+    #ports:
+    #  - 6379:6379
+    #profiles:
+    #  - donotstart
     healthcheck:
       test: redis-cli ping || exit 1
     restart: always
@@ -208,8 +207,8 @@ services:
     image: tailscale/tailscale:stable
     container_name: immich-ts
     hostname: immich
-    profiles:
-      - donotstart
+    #profiles:
+    #  - donotstart
     cap_add:
       - net_admin
     volumes:
