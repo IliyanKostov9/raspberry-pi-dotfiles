@@ -201,14 +201,14 @@ metadata:
   name: passbolt-db-deployment
   namespace: passbolt
   labels:
-    env: prod
+    env: prod-db
 
 spec:
   replicas: 1
   minReadySeconds: 10
   selector:
     matchLabels:
-      env: prod
+      env: prod-db
 
   template:
     metadata:

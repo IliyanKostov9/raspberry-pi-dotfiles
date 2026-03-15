@@ -4,12 +4,9 @@ kind: Service
 metadata:
   name: passbolt-db-service
   namespace: passbolt
-  labels:
-    env: prod
-
 spec:
   selector:
-    env: prod
+    env: prod-db
 
   type: ClusterIP
   ports:
@@ -24,9 +21,6 @@ kind: Service
 metadata:
   name: passbolt-web-service
   namespace: passbolt
-  labels:
-    env: prod
-
 spec:
   selector:
     env: prod
