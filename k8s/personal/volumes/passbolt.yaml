@@ -51,5 +51,5 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: /mnt/micro-sd/storage/postgres18/18/docker
+    path: /mnt/storage/postgres18/18/docker
   persistentVolumeReclaimPolicy: Retain
