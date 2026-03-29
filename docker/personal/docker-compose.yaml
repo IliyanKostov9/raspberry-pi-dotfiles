@@ -228,7 +228,7 @@ services:
       - traefik.enable=false
 
   portfolio:
-    image: ghcr.io/iliyankostov9/portfolio:release-v2.3.1
+    image: ghcr.io/iliyankostov9/portfolio:release-v2.4.0
     #image: IliyanKostov9-local/portfolio:2.2.0
     restart: unless-stopped
     environment:
