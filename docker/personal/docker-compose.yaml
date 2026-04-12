@@ -9,7 +9,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USERNAME}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      - /mnt/storage/postgres18:/var/lib/postgresql
+      - /var/storage/postgres18:/var/lib/postgresql
     secrets:
       - postgres_db
       - postgres_username
@@ -90,10 +90,13 @@ services:
 
   pihole:
     container_name: pi-hole
-    network_mode: "host"
+    #network_mode: "host"
     image: pihole/pihole:latest
     shm_size: 512mb
-    #ports:
+    ports:
+      - "192.168.1.99:53:53/tcp"
+      - "192.168.1.99:53:53/udp"
+      - "8080:8080"
     #  - 53:53
     #  - 8080:8080
     #profiles:
@@ -144,7 +147,7 @@ services:
       PUID: 1000
       PGID: 1000
     volumes:
-      - "/mnt/storage/syncthing:/var/syncthing"
+      - "/var/storage/syncthing:/var/syncthing"
     network_mode: host
     restart: unless-stopped
     healthcheck:
@@ -171,7 +174,7 @@ services:
   immich-server:
     container_name: immich_server
     network_mode: "service:immich-ts"
-    image: ghcr.io/immich-app/immich-server:v2.5.6
+    image: ghcr.io/immich-app/immich-server:v2.7.4
     # extends:
     #   file: hwaccel.transcoding.yml
     #   service: cpu # set to one of [nvenc, quicksync, rkmpp, vaapi, vaapi-wsl] for accelerated transcoding
@@ -190,7 +193,7 @@ services:
       # Do not edit the next line. If you want to change the media storage location on your system, edit the value of UPLOAD_LOCATION in the .env file
       - /etc/library:/usr/src/app/upload
       - /etc/localtime:/etc/localtime:ro
-      - "/mnt/storage/syncthing:/var/syncthing"
+      - "/var/storage/syncthing:/var/syncthing"
     depends_on:
       - redis
       - db
@@ -230,7 +233,7 @@ services:
       - traefik.enable=false
 
   portfolio:
-    image: ghcr.io/iliyankostov9/portfolio:release-v2.3.1
+    image: ghcr.io/iliyankostov9/portfolio:release-v2.5.0
     #image: IliyanKostov9-local/portfolio:2.2.0
     restart: unless-stopped
     environment:
@@ -248,7 +251,7 @@ services:
       PORTFOLIO_S3_AWS_KEY_ID: ${PORTFOLIO_S3_AWS_KEY_ID}
 
     volumes:
-      - /mnt/storage/repos/portfolio:/var/lib/portfolio
+      - /var/storage/repos/portfolio:/var/lib/portfolio
     secrets:
       - portfolio_secret_key
       - portfolio_host
