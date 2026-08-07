@@ -77,7 +77,7 @@ services:
       traefik.http.routers.passbolt-https.tls.certresolver: "letsencrypt"
 
   traefik:
-    image: traefik:v3.7.1
+    image: traefik:v3.7.9
     restart: always
     ports:
       - 80:80
@@ -94,8 +94,8 @@ services:
     image: pihole/pihole:latest
     shm_size: 512mb
     ports:
-      - "192.168.1.99:53:53/tcp"
-      - "192.168.1.99:53:53/udp"
+      - "192.168.88.99:53:53/tcp"
+      - "192.168.88.99:53:53/udp"
       - "8080:8080"
     #  - 53:53
     #  - 8080:8080
@@ -105,14 +105,14 @@ services:
     dns:
       - 1.1.1.1
     environment:
-      TZ: "Europe/Paris"
+      TZ: "Europe/Sofia"
       FTLCONF_dns_dnssec: true
       FTLCONF_DNSMASQ_USER: root
       FTLCONF_DHCP_rapid_commit: true
       FTLCONF_DHCP_ACTIVE: true
       FTLCONF_webserver_port: 8080
       FTLCONF_WEB_BIND_ADDR: "0.0.0.0"
-      #FTLCONF_REPLY_ADDR4: "192.168.1.99"
+      #FTLCONF_REPLY_ADDR4: "192.168.88.99"
       FTLCONF_DHCP_START: "192.168.1.2"
       FTLCONF_DHCP_END: "192.168.1.100"
       FTLCONF_DHCP_ROUTER: "192.168.1.1"
@@ -134,7 +134,7 @@ services:
     labels:
       traefik.enable: "true"
       traefik.http.routers.pihole-http.entrypoints: "web"
-      traefik.http.routers.pihole-http.rule: "Host(`192.168.1.99`)"
+      traefik.http.routers.pihole-http.rule: "Host(`192.168.88.99`)"
       traefik.http.services.pihole.loadbalancer.server.port: "8080"
 
   syncthing:
@@ -174,7 +174,7 @@ services:
   immich-server:
     container_name: immich_server
     network_mode: "service:immich-ts"
-    image: ghcr.io/immich-app/immich-server:v2.7.4
+    image: ghcr.io/immich-app/immich-server:v3.0.3
     # extends:
     #   file: hwaccel.transcoding.yml
     #   service: cpu # set to one of [nvenc, quicksync, rkmpp, vaapi, vaapi-wsl] for accelerated transcoding
@@ -233,7 +233,7 @@ services:
       - traefik.enable=false
 
   portfolio:
-    image: ghcr.io/iliyankostov9/portfolio:release-v3.0.1
+    image: ghcr.io/iliyankostov9/portfolio:release-v3.1.0
     #image: iliyan-local/portfolio:1.0.0
     restart: unless-stopped
     environment:
