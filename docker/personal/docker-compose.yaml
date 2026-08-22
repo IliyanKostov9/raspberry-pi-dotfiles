@@ -121,8 +121,8 @@ services:
       FTLCONF_webserver_api_password: ${PIHOLE_WEBPASSWORD}
       FTLCONF_dns_listeningMode: "all"
     volumes:
-      - "web_data:/data/etc-pihole:/etc/pihole"
-      - "web_data:/data/etc-dnsmasq.d:/etc/dnsmasq.d"
+      - "./etc-pihole:/etc/pihole"
+      - "./etc-dnsmasq.d:/etc/dnsmasq.d"
 
     secrets:
       - pihole_webpassword
@@ -174,7 +174,7 @@ services:
   immich-server:
     container_name: immich_server
     network_mode: "service:immich-ts"
-    image: ghcr.io/immich-app/immich-server:v3.0.3
+    image: ghcr.io/immich-app/immich-server:v3.1.0
     # extends:
     #   file: hwaccel.transcoding.yml
     #   service: cpu # set to one of [nvenc, quicksync, rkmpp, vaapi, vaapi-wsl] for accelerated transcoding
@@ -233,7 +233,7 @@ services:
       - traefik.enable=false
 
   portfolio:
-    image: ghcr.io/iliyankostov9/portfolio:release-v3.1.0
+    image: ghcr.io/iliyankostov9/portfolio:release-v3.2.0
     #image: iliyan-local/portfolio:1.0.0
     restart: unless-stopped
     environment:
@@ -252,6 +252,7 @@ services:
       PORTFOLIO_S3_TEXT_TO_SPEECH_PROD_SECRET_ACCESS_KEY: ${PORTFOLIO_S3_TEXT_TO_SPEECH_PROD_SECRET_ACCESS_KEY}
       PORTFOLIO_S3_MAIN_PROD_BUCKET: ${PORTFOLIO_S3_MAIN_PROD_BUCKET}
       PORTFOLIO_S3_TEXT_TO_SPEECH_PROD_BUCKET: ${PORTFOLIO_S3_TEXT_TO_SPEECH_PROD_BUCKET}
+      PORTFOLIO_CDN_ASSETS_URL: ${PORTFOLIO_CDN_ASSETS_URL}
     volumes:
       - /var/storage/repos/portfolio:/var/lib/portfolio
     secrets:
@@ -270,7 +271,7 @@ services:
       - portfolio_s3_text_to_speech_prod_secret_access_key
       - portfolio_s3_main_prod_bucket
       - portfolio_s3_text_to_speech_prod_bucket
-
+      - portfolio_cdn_assets_url
     expose:
       - 8000
     labels:
@@ -358,3 +359,6 @@ secrets:
     environment: "PORTFOLIO_S3_MAIN_PROD_BUCKET"
   portfolio_s3_text_to_speech_prod_bucket:
     environment: "PORTFOLIO_S3_TEXT_TO_SPEECH_PROD_BUCKET"
+
+  portfolio_cdn_assets_url:
+    environment: "PORTFOLIO_CDN_ASSETS_URL"
