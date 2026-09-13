@@ -97,11 +97,6 @@ services:
       - "192.168.88.99:53:53/tcp"
       - "192.168.88.99:53:53/udp"
       - "8080:8080"
-    #  - 53:53
-    #  - 8080:8080
-    #profiles:
-
-    #  - donotstart
     dns:
       - 1.1.1.1
     environment:
@@ -113,9 +108,9 @@ services:
       FTLCONF_webserver_port: 8080
       FTLCONF_WEB_BIND_ADDR: "0.0.0.0"
       #FTLCONF_REPLY_ADDR4: "192.168.88.99"
-      FTLCONF_DHCP_START: "192.168.1.2"
-      FTLCONF_DHCP_END: "192.168.1.100"
-      FTLCONF_DHCP_ROUTER: "192.168.1.1"
+      FTLCONF_DHCP_START: "192.168.88.2"
+      FTLCONF_DHCP_END: "192.168.88.100"
+      FTLCONF_DHCP_ROUTER: "192.168.88.1"
       FTLCONF_dns_upstreams: "1.1.1.1;1.0.0.1"
       FTLCONF_WEBPASSWORD: ${PIHOLE_WEBPASSWORD}
       FTLCONF_webserver_api_password: ${PIHOLE_WEBPASSWORD}
@@ -140,8 +135,6 @@ services:
   syncthing:
     image: syncthing/syncthing:edge
     container_name: syncthing
-    #profiles:
-    #  - donotstart
     hostname: syncthing-host
     environment:
       PUID: 1000
@@ -233,7 +226,7 @@ services:
       - traefik.enable=false
 
   portfolio:
-    image: ghcr.io/iliyankostov9/portfolio:release-v3.2.0
+    image: ghcr.io/iliyankostov9/portfolio:release-v3.3.0
     #image: iliyan-local/portfolio:1.0.0
     restart: unless-stopped
     environment:
