@@ -22,7 +22,6 @@ nameserver 208.67.222.222
 
 - https://blocklistproject.github.io/Lists/abuse.txt
 - https://blocklistproject.github.io/Lists/ads.txt
-- https://blocklistproject.github.io/Lists/crypto.txt
 - https://blocklistproject.github.io/Lists/drugs.txt
 - https://blocklistproject.github.io/Lists/fraud.txt
 - https://blocklistproject.github.io/Lists/gambling.txt
