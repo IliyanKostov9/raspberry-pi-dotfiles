@@ -50,7 +50,7 @@ spec:
       volumes:
         - name: portfolio-volume
           persistentVolumeClaim:
-            className: portfolio-pvc
+            claimName: portfolio-pvc
 
       containers:
         - name: django-app
