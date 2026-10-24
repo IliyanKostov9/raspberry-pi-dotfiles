@@ -30,12 +30,34 @@ metadata:
   namespace: portfolio
   labels:
     env: prod
-
 spec:
   headers:
     sslRedirect: true
     sslProxyHeaders:
       X-Forwarded-Proto: https
+    frameDeny: true
+    accessControlAllowMethods:
+      - GET
+      - OPTIONS
+      - PUT
+    accessControlAllowOriginList:
+      - origin-list-or-null
+    accessControlMaxAge: 100
+    addVaryHeader: true
+    browserXssFilter: true
+    contentTypeNosniff: true
+    forceSTSHeader: true
+    stsIncludeSubdomains: true
+    stsPreload: true
+    stsSeconds: 315360000
+    contentSecurityPolicy: >
+      default-src 'self';
+      script-src 'self' https://cdnjs.cloudflare.com https://unpkg.com;
+      font-src 'self' https://fonts.gstatic.com;
+      style-src 'self' https://cdnjs.cloudflare.com https://fonts.googleapis.com;
+    customFrameOptionsValue: SAMEORIGIN
+    referrerPolicy: same-origin
+    permissionsPolicy: vibrate 'self'
 ---
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
