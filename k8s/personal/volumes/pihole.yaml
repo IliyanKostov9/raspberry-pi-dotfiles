@@ -13,7 +13,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: /home/pi/repos/raspberry-pi-dotfiles/config/etc2
+    path: /home/pi/repos/raspberry-pi-dotfiles/config/etc-pihole
   persistentVolumeReclaimPolicy: Retain
 
 ---
