@@ -45,7 +45,7 @@ metadata:
     env: prod
 
 spec:
-  storageClassName: db
+  storageClassName: "local-path"
   capacity:
     storage: 4Gi
   accessModes:

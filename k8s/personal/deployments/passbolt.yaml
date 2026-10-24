@@ -8,7 +8,7 @@ metadata:
     env: prod
 
 spec:
-  storageClassName: db
+  storageClassName: "local-path"
   accessModes:
     - ReadWriteOnce
   resources:

@@ -62,7 +62,7 @@ spec:
     certResolver: letsencrypt
   routes:
     - kind: Rule
-      match: Host(`passbolt2.ikostov.org`) && !PathPrefix(`/.well-known/acme-challenge/`)
+      match: Host(`passbolt.ikostov.org`) && !PathPrefix(`/.well-known/acme-challenge/`)
       services:
         - name: passbolt-web-service
           port: 80

@@ -22,9 +22,6 @@ deployment:
     - name: acme
       mountPath: /data
 
-ingressRoute:
-  global:
-    sendAnonymousUsage: false
   log:
     level: INFO
     format: common
@@ -38,6 +35,7 @@ ingressRoute:
       watch: true
 
   tls:
+    secretName: passbolt-tls
     options:
       default:
         minVersion: VersionTLS12
@@ -85,12 +83,12 @@ ingressRoute:
     websecure:
       address: ":443"
 
-  certificatesResolvers:
-    letsencrypt:
-      acme:
-        email: iliyan.kostov@email.ikostov.org
-        storage: /data/acme.json
-        caServer: "https://acme-v02.api.letsencrypt.org/directory"
-        keyType: EC256
-        httpChallenge:
-          entryPoint: web
+  #certificatesResolvers:
+  #  letsencrypt:
+  #    acme:
+  #      email: iliyan.kostov@email.ikostov.org
+  #      storage: /data/acme.json
+  #      caServer: "https://acme-v02.api.letsencrypt.org/directory"
+  #      keyType: EC256
+  #      httpChallenge:
+  #        entryPoint: web
