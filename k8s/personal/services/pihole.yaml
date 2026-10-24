@@ -17,8 +17,8 @@ spec:
       protocol: TCP
       targetPort: 53
 
-    - name: local-80
-      port: 80
+    - name: local-8080
+      port: 8080
       protocol: TCP
-      targetPort: 80
+      targetPort: 8080
       nodePort: 30080

@@ -66,6 +66,3 @@ spec:
       services:
         - name: passbolt-web-service
           port: 80
-      # middlewares:
-      #   - name: passbolt-ingress-route
-      #     namespace: passbolt

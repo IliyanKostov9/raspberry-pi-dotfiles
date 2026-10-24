@@ -73,7 +73,7 @@ spec:
 
           ports:
             - name: default
-              containerPort: 80
+              containerPort: 8080
 
             - name: dns
               containerPort: 53
