@@ -25,7 +25,7 @@ metadata:
     env: prod
 
 spec:
-  storageClassName: "gpg"
+  storageClassName: "local-path"
   accessModes:
     - ReadWriteOnce
   resources:
@@ -41,7 +41,7 @@ metadata:
     env: prod
 
 spec:
-  storageClassName: "jwt"
+  storageClassName: "local-path"
   accessModes:
     - ReadWriteOnce
   resources:
