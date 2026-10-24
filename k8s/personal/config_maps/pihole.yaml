@@ -12,7 +12,7 @@ data:
   FTLCONF_DNSMASQ_USER: root
   FTLCONF_DHCP_rapid_commit: "true"
   FTLCONF_DHCP_ACTIVE: "true"
-  FTLCONF_webserver_port: "8080"
+  FTLCONF_webserver_port: "30080"
   FTLCONF_WEB_BIND_ADDR: "0.0.0.0"
   FTLCONF_DHCP_START: "192.168.88.2"
   FTLCONF_DHCP_END: "192.168.88.100"
