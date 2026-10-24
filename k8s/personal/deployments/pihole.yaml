@@ -57,6 +57,9 @@ spec:
     spec:
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+
       volumes:
         - name: pihole-volume
           persistentVolumeClaim:
