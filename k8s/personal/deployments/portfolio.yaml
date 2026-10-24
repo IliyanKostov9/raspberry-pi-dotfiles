@@ -32,10 +32,7 @@ spec:
       env: prod
 
   strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
+    type: Recreate
 
   template:
     metadata:
