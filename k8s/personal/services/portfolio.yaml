@@ -5,12 +5,10 @@ metadata:
   name: portfolio-service
   namespace: portfolio
   labels:
-    version: v3.5.1
     env: prod
 
 spec:
   selector:
-    version: v3.5.1
     env: prod
 
   ports:
@@ -31,7 +29,6 @@ metadata:
   name: portfolio-ingress-route
   namespace: portfolio
   labels:
-    version: v3.5.1
     env: prod
 
 spec:
@@ -46,7 +43,6 @@ metadata:
   name: portfolio-ingress-route
   namespace: portfolio
   labels:
-    version: v3.5.1
     env: prod
 
 spec:

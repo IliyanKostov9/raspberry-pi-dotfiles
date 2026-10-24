@@ -8,6 +8,7 @@ metadata:
     env: prod
 
 spec:
+  storageClassName: "local-path"
   accessModes:
     - ReadWriteOnce
   resources:
@@ -21,15 +22,13 @@ metadata:
   name: portfolio-deployment
   namespace: portfolio
   labels:
-    version: v2.3.1
     env: prod
-  
+
 spec:
   replicas: 1
   minReadySeconds: 10
   selector:
     matchLabels:
-      version: v2.3.1
       env: prod
 
   strategy:
@@ -43,15 +42,19 @@ spec:
       annotations:
         kubectl.kubernetes.io/default-container: portfolio-deployment
       labels:
-        version: v2.3.1
         env: prod
 
     spec:
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
+      volumes:
+        - name: portfolio-volume
+          persistentVolumeClaim:
+            className: portfolio-pvc
+
       containers:
         - name: django-app
-          image: ghcr.io/iliyankostov9/portfolio:release-v2.3.1
+          image: ghcr.io/iliyankostov9/portfolio:release-v3.5.1
           #image: localhost:5000/portfolio:latest3
           imagePullPolicy: IfNotPresent
 
@@ -61,7 +64,7 @@ spec:
 
             - name: inter-loki
               containerPort: 3100
-       
+
           resources:
             requests:
               cpu: 2000m
@@ -70,7 +73,7 @@ spec:
             limits:
               cpu: 4000m
               memory: 4G
-        
+
           env:
             - name: PORTFOLIO_SECRET_KEY
               valueFrom:
@@ -90,6 +93,12 @@ spec:
                   name: portfolio-secrets
                   key: PORTFOLIO_EMAIL_PASSWORD
 
+            - name: PORTFOLIO_EMAIL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: portfolio-secrets
+                  key: PORTFOLIO_EMAIL_USER
+
             - name: PORTFOLIO_EMAIL_HOST
               valueFrom:
                 secretKeyRef:
@@ -108,26 +117,53 @@ spec:
                   name: portfolio-secrets
                   key: PORTFOLIO_FROM_EMAIL
 
+            - name: PORTFOLIO_ENV
+              value: prod
+
+            - name: PORTFOLIO_S3_MAIN_PROD_BUCKET
+              valueFrom:
+                secretKeyRef:
+                  name: portfolio-secrets
+                  key: PORTFOLIO_S3_MAIN_PROD_BUCKET
+
+            - name: PORTFOLIO_S3_MAIN_PROD_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: portfolio-secrets
+                  key: PORTFOLIO_S3_MAIN_PROD_SECRET_ACCESS_KEY
+
+            - name: PORTFOLIO_S3_MAIN_PROD_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: portfolio-secrets
+                  key: PORTFOLIO_S3_MAIN_PROD_ACCESS_KEY_ID
+
+            - name: PORTFOLIO_S3_TEXT_TO_SPEECH_PROD_BUCKET
+              valueFrom:
+                secretKeyRef:
+                  name: portfolio-secrets
+                  key: PORTFOLIO_S3_TEXT_TO_SPEECH_PROD_BUCKET
+
+            - name: PORTFOLIO_S3_TEXT_TO_SPEECH_PROD_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: portfolio-secrets
+                  key: PORTFOLIO_S3_TEXT_TO_SPEECH_PROD_SECRET_ACCESS_KEY
+
+            - name: PORTFOLIO_S3_TEXT_TO_SPEECH_PROD_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: portfolio-secrets
+                  key: PORTFOLIO_S3_TEXT_TO_SPEECH_PROD_ACCESS_KEY_ID
+
+            - name: PORTFOLIO_CDN_ASSETS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: portfolio-secrets
+                  key: PORTFOLIO_CDN_ASSETS_URL
+
             - name: PORTFOLIO_LOKI_URL
               valueFrom:
                 secretKeyRef:
                   name: portfolio-secrets
                   key: PORTFOLIO_LOKI_URL
-
-            - name: PORTFOLIO_S3_AWS_BUCKET
-              valueFrom:
-                secretKeyRef:
-                  name: portfolio-secrets
-                  key: PORTFOLIO_S3_AWS_BUCKET
-
-            - name: PORTFOLIO_S3_AWS_SECRET_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: portfolio-secrets
-                  key: PORTFOLIO_S3_AWS_SECRET_ACCESS_KEY
-
-            - name: PORTFOLIO_S3_AWS_KEY_ID
-              valueFrom:
-               secretKeyRef:
-                 name: portfolio-secrets
-                 key: PORTFOLIO_S3_AWS_KEY_ID
