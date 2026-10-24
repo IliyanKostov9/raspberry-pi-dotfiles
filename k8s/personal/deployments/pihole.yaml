@@ -42,6 +42,8 @@ metadata:
 
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   minReadySeconds: 10
   selector:
     matchLabels:
@@ -57,8 +59,8 @@ spec:
     spec:
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
-      # hostNetwork: true
-      # dnsPolicy: ClusterFirstWithHostNet
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
 
       volumes:
         - name: pihole-volume
