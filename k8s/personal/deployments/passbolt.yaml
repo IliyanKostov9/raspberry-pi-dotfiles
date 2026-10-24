@@ -100,6 +100,12 @@ spec:
             - name: internal-port
               containerPort: 80
 
+          volumeMounts:
+            - name: gpg-volume
+              mountPath: /etc/passbolt/gpg
+            - name: jwt-volume
+              mountPath: /etc/passbolt/jwt
+
           # resources:
           #   requests:
           #     cpu: 400m
