@@ -15,3 +15,6 @@ data:
   IMMICH_ENV: "production"
   IMMICH_HOST: "0.0.0.0"
   IMMICH_PORT: "2283"
+  REDIS_HOSTNAME: "localhost"
+  REDIS_PORT: "6379"
+  DB_USERNAME: "immich"
