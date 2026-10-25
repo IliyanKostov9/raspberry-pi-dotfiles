@@ -60,6 +60,9 @@ spec:
               add: ["NET_ADMIN"]
 
           env:
+            - name: TS_KUBE_SECRET
+              value: ""
+
             - name: TS_STATE_DIR
               value: "/var/lib/tailscale"
             - name: TS_SERVE_CONFIG
@@ -117,3 +120,9 @@ spec:
                 secretKeyRef:
                   name: immich-secrets
                   key: DB_PASSWORD
+
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: immich-secrets
+                  key: DB_USERNAME
