@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: immich-config
+  namespace: immich
+  labels:
+    env: immich
+
+data:
+  DB_HOSTNAME: "passbolt-db-service.passbolt.svc.cluster.local"
+  UPLOAD_LOCATION: "/etc/library"
+  DB_DATABASE_NAME: "immich"
+  IMMICH_VERSION: "release"
+  TZ: "Europe/Sofia"
+  IMMICH_ENV: "production"
+  IMMICH_HOST: "0.0.0.0"
+  IMMICH_PORT: "2283"

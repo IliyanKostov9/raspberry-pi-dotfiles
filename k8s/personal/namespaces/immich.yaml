@@ -3,4 +3,4 @@ kind: Namespace
 metadata:
   name: immich
   labels:
-    env: private
+    env: immich

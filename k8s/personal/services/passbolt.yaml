@@ -42,7 +42,6 @@ metadata:
 
 spec:
   headers:
-    # sslRedirect: true
     sslProxyHeaders:
       X-Forwarded-Proto: https
 ---

@@ -4,31 +4,13 @@ metadata:
   name: immich-service
   namespace: immich
   labels:
-    env: private
+    env: immich
 
 spec:
+  type: ClusterIP
+  selector: immich
   ports:
-    - name: private-port
+    - name: http
       port: 2283
-      protocol: TCP
       targetPort: 2283
-
----
-apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
-metadata:
-  name: immich-ingress-route
-  namespace: immich
-  labels:
-    env: private
-
-spec:
-  selector:
-    env: private
-
-  routes:
-    - kind: Rule
-      match: Host(`192.1`)
-  services:
-    - name: immich-service
-      port: 2283
+      protocol: TCP

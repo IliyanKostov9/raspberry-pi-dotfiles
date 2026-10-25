@@ -224,15 +224,6 @@ spec:
             - name: db-volume
               mountPath: /var/lib/postgresql/18/docker
 
-          # resources:
-          #   requests:
-          #     cpu: 400m
-          #     memory: 1Gi
-          #
-          #   limits:
-          #     cpu: 800m
-          #     memory: 2Gi
-
           env:
             - name: POSTGRES_DB
               valueFrom:
