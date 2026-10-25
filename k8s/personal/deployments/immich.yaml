@@ -108,7 +108,7 @@ spec:
             - name: library
               mountPath: /usr/src/app/upload
 
-            - name: localtime-volume
+            - name: syncthing
               mountPath: /var/syncthing
 
           env:
