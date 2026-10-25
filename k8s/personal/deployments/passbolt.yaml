@@ -106,15 +106,6 @@ spec:
             - name: jwt-volume
               mountPath: /etc/passbolt/jwt
 
-          # resources:
-          #   requests:
-          #     cpu: 400m
-          #     memory: 1Gi
-          #
-          #   limits:
-          #     cpu: 800m
-          #     memory: 2Gi
-
           env:
             - name: DB_HOST
               value: passbolt-db-service
