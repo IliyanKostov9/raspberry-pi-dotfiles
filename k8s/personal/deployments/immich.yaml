@@ -89,10 +89,10 @@ spec:
           readinessProbe:
             exec:
               command: ["sh", "-c", "redis-cli ping"]
-          initialDelaySeconds: 20
-          periodSeconds: 60
-          timeoutSeconds: 10
-          failureThreshold: 3
+            initialDelaySeconds: 20
+            periodSeconds: 60
+            timeoutSeconds: 10
+            failureThreshold: 3
 
         - name: immich-app
           image: ghcr.io/immich-app/immich-server:v3.3.1
