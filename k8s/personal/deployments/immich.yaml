@@ -33,8 +33,8 @@ spec:
 
         - name: tailscale-serve-config
           hostPath:
-            path: /home/iliyan/repos/raspberry-pi-dotfiles/config/tailscale/serveconfig
-            type: Directory
+            path: /home/iliyan/repos/raspberry-pi-dotfiles/config/tailscale/serveconfig.json
+            type: File
 
         - name: tun-device
           hostPath:
@@ -76,7 +76,7 @@ spec:
             - name: tailscale-state
               mountPath: /var/lib/tailscale
             - name: tailscale-serve-config
-              mountPath: /config
+              mountPath: /config/serve-config.json
             - name: tun-device
               mountPath: /dev/net/tun
 
