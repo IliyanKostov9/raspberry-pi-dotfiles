@@ -167,3 +167,5 @@ cython_debug/
 docker/personal/shared/
 docker/personal/etc-pihole/
 .devenv
+
+k8s/personal/secrets/*.yaml
