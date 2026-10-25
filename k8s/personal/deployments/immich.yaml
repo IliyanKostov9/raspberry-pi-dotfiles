@@ -113,6 +113,7 @@ spec:
 
             - name: syncthing
               mountPath: /var/syncthing
+              readOnly: true
 
           env:
             - name: DB_PASSWORD
