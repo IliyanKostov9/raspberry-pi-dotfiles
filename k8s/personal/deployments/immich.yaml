@@ -1,0 +1,138 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-deployment
+  namespace: immich
+  labels:
+    env: immich
+
+spec:
+  replicas: 1
+  minReadySeconds: 30
+  selector:
+    matchLabels:
+      env: immich
+
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container: immich-server
+      labels:
+        env: immich
+
+    spec:
+      hostname: immich
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+
+      volumes:
+        - name: tailscale-state
+          hostPath:
+            path: /tailscale
+            type: DirectoryOrCreate
+
+        - name: tailscale-serve-config
+          hostPath:
+            path: /home/iliyan/repos/raspberry-pi-dotfiles/config/tailscale/serveconfig.json
+            type: File
+
+        - name: tun-device
+          hostPath:
+            path: /dev/net/tun
+            type: CharDevice
+
+        - name: library
+          hostPath:
+            path: /etc/library
+            type: DirectoryOrCreate
+
+        - name: syncthing
+          hostPath:
+            path: /var/storage/syncthing
+            type: Directory
+
+      containers:
+        - name: immich-tailscale
+          image: tailscale/tailscale:stable
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            capabilities:
+              add: ["NET_ADMIN"]
+
+          env:
+            - name: TS_KUBE_SECRET
+              value: ""
+
+            - name: TS_STATE_DIR
+              value: "/var/lib/tailscale"
+            - name: TS_SERVE_CONFIG
+              value: "/config/serve-config.json"
+            - name: TS_USERSPACE
+              value: "false"
+            - name: TS_AUTHKEY
+              valueFrom:
+                secretKeyRef:
+                  name: immich-secrets
+                  key: TS_AUTHKEY
+
+          volumeMounts:
+            - name: tailscale-state
+              mountPath: /var/lib/tailscale
+            - name: tailscale-serve-config
+              mountPath: /config/serve-config.json
+            - name: tun-device
+              mountPath: /dev/net/tun
+
+        - name: immich-redis
+          image: docker.io/valkey/valkey:8-bookworm@sha256:fec42f399876eb6faf9e008570597741c87ff7662a54185593e74b09ce83d177
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: redis
+              containerPort: 6379
+          readinessProbe:
+            exec:
+              command: ["sh", "-c", "redis-cli ping"]
+            initialDelaySeconds: 20
+            periodSeconds: 60
+            timeoutSeconds: 10
+            failureThreshold: 3
+
+        - name: immich-app
+          image: ghcr.io/immich-app/immich-server:v3.3.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 2283
+          envFrom:
+            - configMapRef:
+                name: immich-config
+
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+
+            limits:
+              cpu: "0.5"
+              memory: 5Gi
+
+          volumeMounts:
+            - name: library
+              mountPath: /usr/src/app/upload
+
+            - name: syncthing
+              mountPath: /var/syncthing
+              readOnly: true
+
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: immich-secrets
+                  key: DB_PASSWORD
+
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: immich-secrets
+                  key: DB_USERNAME

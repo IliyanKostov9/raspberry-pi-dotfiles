@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: portfolio-pv
+  namespace: portfolio
+  labels:
+    env: prod
+
+spec:
+  capacity:
+    storage: 3Gi
+  accessModes: 
+    - ReadWriteOnce
+  hostPath:
+    path: /mnt/micro-sd/apps/portfolio
+  persistentVolumeReclaimPolicy: Retain
+

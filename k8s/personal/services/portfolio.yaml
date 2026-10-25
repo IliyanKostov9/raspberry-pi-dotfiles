@@ -1,0 +1,81 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: portfolio-service
+  namespace: portfolio
+  labels:
+    env: prod
+
+spec:
+  selector:
+    env: prod
+
+  ports:
+    - name: asgi
+      port: 8000
+      protocol: TCP
+      targetPort: 8000
+
+    - name: loki
+      port: 3100
+      protocol: TCP
+      targetPort: 3100
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: portfolio-ingress-route
+  namespace: portfolio
+  labels:
+    env: prod
+spec:
+  headers:
+    sslRedirect: true
+    sslProxyHeaders:
+      X-Forwarded-Proto: https
+    frameDeny: true
+    accessControlAllowMethods:
+      - GET
+      - OPTIONS
+      - PUT
+    accessControlAllowOriginList:
+      - origin-list-or-null
+    accessControlMaxAge: 100
+    addVaryHeader: true
+    browserXssFilter: true
+    contentTypeNosniff: true
+    forceSTSHeader: true
+    stsIncludeSubdomains: true
+    stsPreload: true
+    stsSeconds: 315360000
+    contentSecurityPolicy: >
+      default-src 'self';
+      script-src 'self' https://cdnjs.cloudflare.com https://unpkg.com;
+      font-src 'self' https://fonts.gstatic.com;
+      style-src 'self' https://cdnjs.cloudflare.com https://fonts.googleapis.com;
+    customFrameOptionsValue: SAMEORIGIN
+    referrerPolicy: same-origin
+    permissionsPolicy: vibrate 'self'
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: portfolio-ingress-route
+  namespace: portfolio
+  labels:
+    env: prod
+
+spec:
+  tls:
+    certResolver: letsencrypt
+  routes:
+    - kind: Rule
+      match: Host(`${PORTFOLIO_HOST}`)
+      services:
+        - name: portfolio-service
+          port: 8000
+      middlewares:
+        - name: portfolio-ingress-route
+          namespace: portfolio

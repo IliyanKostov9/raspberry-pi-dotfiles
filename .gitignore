@@ -165,7 +165,8 @@ cython_debug/
 
 .runner
 docker/personal/shared/
-k8s/personal/shared/
 docker/personal/etc-pihole/
-k8s/personal/etc-pihole/
 .devenv
+
+k8s/personal/secrets/*.yaml
+.envrc
