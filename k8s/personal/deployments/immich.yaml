@@ -107,6 +107,15 @@ spec:
             - configMapRef:
                 name: immich-config
 
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+
+            limits:
+              cpu: "1"
+              memory: 2Gi
+
           volumeMounts:
             - name: library
               mountPath: /usr/src/app/upload
