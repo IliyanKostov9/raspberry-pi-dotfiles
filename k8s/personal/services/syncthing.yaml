@@ -7,13 +7,12 @@ metadata:
     env: local
 
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     env: local
 
   ports:
-    - name: local
+    - name: gui
       port: 8384
       protocol: TCP
       targetPort: 8384
-      nodePort: 30084

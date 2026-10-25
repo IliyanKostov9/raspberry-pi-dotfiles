@@ -8,7 +8,8 @@ metadata:
 
 spec:
   replicas: 1
-  minReadySeconds: 10
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       env: local
@@ -21,27 +22,44 @@ spec:
         env: local
 
     spec:
-      securityContext:
-        fsGroup: 1000
+      hostname: syncthing-host
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+        runAsGroup: 1000
+
       volumes:
         - name: syncthing-volume
           hostPath:
-            path: /mnt/storage/syncthing
+            path: /var/storage/syncthing
             type: Directory
+
       containers:
         - name: syncthing
           image: syncthing/syncthing:edge
           imagePullPolicy: IfNotPresent
 
           ports:
-            - name: default
+            - name: gui
               containerPort: 8384
+              protocol: TCP
+
+            - name: sync-quic
+              containerPort: 22000
+              protocol: UDP
+
+            - name: discovery
+              containerPort: 21027
+              protocol: UDP
 
           volumeMounts:
             - name: syncthing-volume
-              mountPath: /syncthing
+              mountPath: /var/syncthing
 
           env:
             - name: PUID
@@ -49,3 +67,15 @@ spec:
 
             - name: PGID
               value: "1000"
+          readinessProbe:
+            exec:
+              command:
+                [
+                  "sh",
+                  "-c",
+                  "curl -fkLsS -n 2 127.0.0.1:8384/rest/noauth/health | grep -o --color=never OK",
+                ]
+            initialDelaySeconds: 20
+            periodSeconds: 60
+            timeoutSeconds: 10
+            failureThreshold: 3
