@@ -169,3 +169,4 @@ docker/personal/etc-pihole/
 .devenv
 
 k8s/personal/secrets/*.yaml
+.envrc
