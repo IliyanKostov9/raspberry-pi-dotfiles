@@ -1,5 +1,5 @@
 additionalArguments:
-  - "--certificatesresolvers.letsencrypt.acme.email=iliyan.kostov@email.ikostov.org"
+  - "--certificatesresolvers.letsencrypt.acme.email=<REDACTED>"
   - "--certificatesresolvers.letsencrypt.acme.storage=/data/acme.json"
   - "--certificatesresolvers.letsencrypt.acme.keytype=EC256"
   - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
@@ -86,7 +86,7 @@ deployment:
   #certificatesResolvers:
   #  letsencrypt:
   #    acme:
-  #      email: iliyan.kostov@email.ikostov.org
+  #      email: <REDACTED>
   #      storage: /data/acme.json
   #      caServer: "https://acme-v02.api.letsencrypt.org/directory"
   #      keyType: EC256
