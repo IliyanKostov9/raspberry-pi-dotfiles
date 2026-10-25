@@ -1,5 +1,5 @@
 additionalArguments:
-  - "--certificatesresolvers.letsencrypt.acme.email=<REDACTED>"
+  - "--certificatesresolvers.letsencrypt.acme.email=${EMAIL}"
   - "--certificatesresolvers.letsencrypt.acme.storage=/data/acme.json"
   - "--certificatesresolvers.letsencrypt.acme.keytype=EC256"
   - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
@@ -86,7 +86,7 @@ deployment:
   #certificatesResolvers:
   #  letsencrypt:
   #    acme:
-  #      email: <REDACTED>
+  #      email: ${EMAIL}
   #      storage: /data/acme.json
   #      caServer: "https://acme-v02.api.letsencrypt.org/directory"
   #      keyType: EC256

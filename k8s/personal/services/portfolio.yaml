@@ -72,7 +72,7 @@ spec:
     certResolver: letsencrypt
   routes:
     - kind: Rule
-      match: Host(`portfolio.ikostov.org`)
+      match: Host(`${PORTFOLIO_HOST}`)
       services:
         - name: portfolio-service
           port: 8000
