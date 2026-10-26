@@ -109,11 +109,11 @@ spec:
 
           resources:
             requests:
-              cpu: 250m
+              cpu: 500m
               memory: 512Mi
 
             limits:
-              cpu: "0.5"
+              cpu: "1"
               memory: 5Gi
 
           volumeMounts:
