@@ -113,7 +113,7 @@ spec:
               memory: 512Mi
 
             limits:
-              cpu: "1"
+              cpu: "0.5"
               memory: 5Gi
 
           volumeMounts:
