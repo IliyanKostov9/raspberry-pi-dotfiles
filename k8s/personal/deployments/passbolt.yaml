@@ -85,7 +85,7 @@ spec:
 
       containers:
         - name: passbolt-app
-          image: passbolt/passbolt:latest
+          image: passbolt/passbolt:5.17.0-1-ce
           imagePullPolicy: IfNotPresent
           command: ["/usr/bin/wait-for.sh"]
           args:
