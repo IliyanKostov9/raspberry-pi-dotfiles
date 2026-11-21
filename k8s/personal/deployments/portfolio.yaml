@@ -51,7 +51,7 @@ spec:
 
       containers:
         - name: django-app
-          image: ghcr.io/iliyankostov9/portfolio:release-v3.5.1
+          image: ghcr.io/iliyankostov9/portfolio:release-v3.5.2
           #image: localhost:5000/portfolio:latest3
           imagePullPolicy: IfNotPresent
 

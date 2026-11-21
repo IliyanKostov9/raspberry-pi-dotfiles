@@ -85,7 +85,7 @@ spec:
 
       containers:
         - name: passbolt-app
-          image: passbolt/passbolt:5.17.0-1-ce
+          image: passbolt/passbolt:5.18.0-2-ce
           imagePullPolicy: IfNotPresent
           command: ["/usr/bin/wait-for.sh"]
           args:
@@ -199,6 +199,10 @@ spec:
     spec:
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
+      securityContext:
+        runAsUser: 999
+        runAsGroup: 999
+        fsGroup: 999
       volumes:
         - name: db-volume
           persistentVolumeClaim:
@@ -208,6 +212,7 @@ spec:
         - name: passbolt-db
           image: pgvector/pgvector:pg18-trixie
           imagePullPolicy: IfNotPresent
+          args: ["postgres", "-c", "io_method=sync"]
           ports:
             - name: db-port
               containerPort: 5432

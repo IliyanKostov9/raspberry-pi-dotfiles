@@ -98,7 +98,7 @@ spec:
             failureThreshold: 3
 
         - name: immich-app
-          image: ghcr.io/immich-app/immich-server:v3.3.5
+          image: ghcr.io/immich-app/immich-server:v3.4.2
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
